@@ -6,7 +6,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <form action="${pageContext.request.contextPath}/homePage"
+        <form action="${pageContext.request.contextPath}/LoginController"
               style="
                     margin-left: 20px;
                     font-size: 20px;
