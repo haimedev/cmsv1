@@ -11,7 +11,7 @@
                     margin-left: 20px;
                     font-size: 20px;
                     ">
-            <h1 style="color: blue;">Cafe Management System</h1>
+            <h1 style="color: red;">Cafe Management System</h1>
             Username: <input type="text" name="userName" style="font-size: 15px; margin-bottom: 5px; border: 2px solid black; padding: 4px 4px 4px 4px"/>
             <br/>
             Password: &nbsp<input type="password" name="passWord" style="font-size: 15px; margin-bottom: 5px; border: 2px solid black; padding: 4px 4px 4px 4px"/>
