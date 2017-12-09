@@ -10,16 +10,6 @@
         </session-timeout>
     </session-config>
     
-    <servlet>
-        <servlet-name>DpServlet</servlet-name>
-        <servlet-class>
-            org.springframework.web.servlet.DispatcherServlet
-        </servlet-class>
-    </servlet>
     
-    <servlet-mapping>
-        <servlet-name>DpServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
     
 </web-app>

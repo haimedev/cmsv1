@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" media="all" href="../../css/logincss.css">
+        <link rel="stylesheet" type="text/css" href="../../css/logincss.css">
         <title>JSP Page</title>
     </head>
     <body>

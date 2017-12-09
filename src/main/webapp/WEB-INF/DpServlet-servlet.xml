@@ -10,10 +10,8 @@
 	http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-2.5.xsd ">
-	
-	
+
+	<mvc:resources mapping="/resources/**" location="/resources" />
 	<ctx:annotation-config></ctx:annotation-config>
-	<ctx:component-scan 
-            base-package="com.cmsv1.controller.login">
-        </ctx:component-scan>
+	<ctx:component-scan base-package="com.cmsv1.controller.login"></ctx:component-scan>
 </beans>
