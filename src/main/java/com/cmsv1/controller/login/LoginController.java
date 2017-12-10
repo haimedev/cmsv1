@@ -16,43 +16,42 @@ import org.springframework.web.servlet.ModelAndView;
 public class LoginController
 {
     @RequestMapping("/LoginController")
-    public String UserLogin(HttpServletRequest request, HttpServletResponse response) throws SQLException
+    public ModelAndView UserLogin(HttpServletRequest request, HttpServletResponse response) throws SQLException
     {
         LoginServiceBeanImpl _loginServiceBeanImpl = new LoginServiceBeanImpl();
         ModelAndView mv = new ModelAndView();
-//        try
-//        {
-//            Properties prop = new Properties();
-//            InputStream iS = LoginController.class.getClassLoader().getResourceAsStream("com/cmsv1/properties/config.properties");
-//            prop.load(iS);
-//            if(request.getParameter("login_btn")!= null)
-//            {
-//                boolean isValid = false;
-//                isValid = _loginServiceBeanImpl.isUserValid(request.getParameter("userName"), request.getParameter("passWord"));
-//                if(isValid)
-//                {
+        try
+        {
+            Properties prop = new Properties();
+            InputStream iS = LoginController.class.getClassLoader().getResourceAsStream("com/cmsv1/properties/config.properties");
+            prop.load(iS);
+            if(request.getParameter("login_btn")!= null)
+            {
+                boolean isValid = false;
+                isValid = _loginServiceBeanImpl.isUserValid(request.getParameter("userName"), request.getParameter("passWord"));
+                if(isValid)
+                {
 ////                  HttpSession session = request.getSession();
 ////                  session.setAttribute("imagesPath", _systemDirectoryPath);
 ////                  session.setAttribute("userName", request.getParameter("userName"));
 ////                  request.getRequestDispatcher("jsp/home/home.jsp").forward(request, response);
 ////                    System.out.println("true");
-//                    mv.setViewName("home.jsp");
-//                    mv.addObject("name", prop.getProperty("name"));
-//                    //mv.addObject("name", _config.prop.getProperty("imgPath"));
-//                }
-//                else
-//                {
-//                    mv.setViewName("home.jsp");
-//                    mv.addObject("name", prop.getProperty("name"));
-//                    System.out.println("spring mvc failed");
-//                }
-//            }
-//        }
-//        catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//        return mv;
-          return "home.jsp";
+                    mv.setViewName("view/jsp/home/home.jsp");
+                    mv.addObject("name", prop.getProperty("name"));
+                    //mv.addObject("name", _config.prop.getProperty("imgPath"));
+                }
+                else
+                {
+                    mv.setViewName("home.jsp");
+                    mv.addObject("name", prop.getProperty("name"));
+                    System.out.println("spring mvc failed");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return mv;
     }
 }

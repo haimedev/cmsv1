@@ -1,9 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="../../css/logincss.css">
+        <link href="<c:url value="/view/css/logincss.css" />" rel="stylesheet">
         <title>JSP Page</title>
     </head>
     <body>
@@ -24,12 +25,12 @@
                         </th>
                     </tr>
                     <tr>
-                        <td><input class="loginTxt" type="text" name="userName"/></td>
-                        <td><input class="loginTxt" type="password" name="passWord"/></td>
+                        <td><input class="loginTxt" type="text" name="userName" required/></td>
+                        <td><input class="loginTxt" type="password" name="passWord" required/></td>
                     </tr>
                     <tr>
                         <td><input class="loginBtn" type="submit" name="login_btn"  value="login"/></td>
-                        <td><input class="loginBtn" type="submit" name="clear_btn" value="clear"/></td>
+                        <td><input class="loginBtn" type="reset" name="clear_btn" value="clear"/></td>
                     </tr>
                 </table>
             </form>

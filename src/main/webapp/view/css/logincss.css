@@ -9,7 +9,7 @@ body
     color: white;
     overflow: hidden;
     background-color: rgb(59,89,152);
-    padding: 20px 100px 20px 100px;
+    padding: 20px 150px 20px 150px;
 }
 
 #companyName
@@ -26,7 +26,7 @@ body
 
 .loginTxt
 {
-    font-size: 15px;
+    font-size: 12px;
     margin-bottom: 5px; 
     border: 1px solid black; 
     padding: 4px 4px 4px 4px;
@@ -35,12 +35,7 @@ body
 .loginBtn
 {
     font-size: 15px; 
-    border: none; 
+    border: 1px solid rgb(46,80,145); 
     color: white; 
-    background-color: gray;
+    background-color: rgb(63,107,176);
 }
-
-/*body
-{
-background-color: red;
-}*/
