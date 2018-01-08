@@ -1,22 +1,12 @@
-body
-{
-    margin:0;
-}
-
-#moduleDiv
-{ 
-    height: 118px;
-    background-color:rgb(59,89,152);
-}
-
 #moduleTbl
 {
     position:absolute;
     top: 70px;
-    left: 100px;
+    left: 50%;
 }
 
 .moduleImg
 {
     padding-right: 50px; 
+    opacity:0.9;
 }

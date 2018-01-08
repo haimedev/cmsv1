@@ -8,11 +8,10 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <div id="moduleDiv">
-        </div>
+        <jsp:include page="../pageHeader.jsp"/>
         <table id="moduleTbl">
             <tr>
-                <th class="moduleImg"><a href="home.jsp"><img src="<c:url value="/view/images/time.jpg"/>"> </a> </th>
+                <th class="moduleImg"><a href="${pageContext.request.contextPath}/TimelineController"> <img src="<c:url value="/view/images/time.jpg"/>"> </a> </th>
                 <th class="moduleImg"><a href=""><img src="<c:url value="/view/images/balance.jpg"/>"> </a> </th>
             </tr>
         </table>

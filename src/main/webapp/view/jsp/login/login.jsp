@@ -35,6 +35,18 @@
                 </table>
             </form>
         </div>
-        
+        <c:choose>
+            <c:when test="${isUserValid == 'false'}">
+                <script>
+                    alert("invalid credentials");
+                </script>
+            </c:when>
+            <c:when test="${condition2}">
+              ...
+            </c:when>
+            <c:otherwise>
+              ...
+            </c:otherwise>
+        </c:choose>
     </body>
 </html>

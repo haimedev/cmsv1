@@ -14,7 +14,7 @@
         <mvc:resources mapping="/view/**" location="/view/" />
         <!--<mvc:resources mapping="/view/**" location="/view/" />-->
 	<ctx:annotation-config></ctx:annotation-config>
-	<ctx:component-scan base-package="com.cmsv1.controller.login">
+	<ctx:component-scan base-package="com.cmsv1.controller">
         </ctx:component-scan>
         <mvc:annotation-driven />
 </beans>

@@ -1,4 +1,4 @@
-package com.cmsv1.bean.login;
+package com.cmsv1.bean;
 
 import com.cmsv1.sqlconnection.SQLiteConfiguration;
 import java.sql.ResultSet;
