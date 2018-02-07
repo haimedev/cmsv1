@@ -19,7 +19,8 @@ public class LoginController
     @RequestMapping("/LoginController")
     public void UserLogin(HttpServletRequest request, HttpServletResponse response) throws SQLException
     {
-        LoginServiceBeanImpl _loginServiceBeanImpl = new LoginServiceBeanImpl();
+        HttpSession session = request.getSession();
+        LoginServiceBeanImpl _serviceBean = new LoginServiceBeanImpl();
         ModelAndView mv = new ModelAndView();
         try
         {
@@ -32,14 +33,16 @@ public class LoginController
                 System.out.println(request.getParameter("login_btn"));
                 RequestDispatcher rd = null;
                 boolean isValid = false;
-                isValid = _loginServiceBeanImpl.isUserValid(request.getParameter("userName"), request.getParameter("passWord"));
+                isValid = _serviceBean.isUserValid(request.getParameter("userName"), request.getParameter("passWord"));
                 if(isValid)
                 {
 //                    mv.setViewName("view/jsp/home/home.jsp");
 //                    mv.addObject("name", prop.getProperty("name"));
 //                    rd = request.getRequestDispatcher("/view/jsp/home/home.jsp");
 //                    rd.forward(request, response);
-                    response.sendRedirect("HomePage");
+                    session.setAttribute("adminFullName", _serviceBean.retrieveUserFullName(request.getParameter("userName"), request.getParameter("passWord")));
+                    response.sendRedirect("HomeController");
+                    
                 }
                 else
                 {
@@ -50,7 +53,7 @@ public class LoginController
 //                    System.out.println("spring mvc failed");
 //                    rd = request.getRequestDispatcher("HomeController");
 //                    rd.forward(request, response);
-                    response.sendRedirect("HomeController");
+                    response.sendRedirect("LoginPage");
                 }
             }
         }

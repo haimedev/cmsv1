@@ -12,9 +12,9 @@ import java.util.List;
  *
  * @author UpuanNgHARI
  */
-public interface TimelineServiceBean
+public interface AmountBalanceServiceBean
 {
-    public List<TimeBalanceProp> getTimeBalance(String timeLineType);
-    public void createTimeBalance(String adminFullName, String custName, String timeHour, String timeMinute, String comments);
-    public void deleteTimeBalance(String adminFullName, String timeId);
+    public List<AmountBalanceProp> getAmountBalance(String timeLineType);
+    public void createAmountBalance(String adminFullName, String custName, String amount, String comments);
+    public void updateAmountBalance(String adminFullName, String amountId);
 }

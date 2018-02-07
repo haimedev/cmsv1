@@ -15,7 +15,31 @@ public class TimeBalanceProp
     public String tb_time;
     public String tb_date;
     public String tb_customername;
+    public String tb_type;
+    public String tb_comments;
 
+    public String getTb_comments()
+    {
+        return tb_comments;
+    }
+
+    public void setTb_comments(String tb_comments)
+    {
+        this.tb_comments = tb_comments;
+    }
+    
+    public String getTb_type()
+    {
+        return tb_type;
+    }
+
+    public void setTb_type(String tb_type)
+    {
+        this.tb_type = tb_type;
+    }
+
+    
+    
     public String getTb_id()
     {
         return tb_id;

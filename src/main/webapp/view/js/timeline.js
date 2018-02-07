@@ -1,5 +1,7 @@
 var globalVar = 5;
-
+var t;
+var url = window.location.href;
+var type = getParameterByName('timeLineType') || "unused";
 function setTime(button)
 {
     var btnValue = button.value.substr(0,button.value.indexOf(' '));
@@ -30,43 +32,134 @@ function setTime(button)
     }
 }
 
-//$(document).ready(function(){
-//    $("#rowClick > tr").click(function(){
-//        $(this).toggleClass("active");
-//    });
-//});
+$(document).ready(function()
+{
+    
+});
 
-function addRowHandlers() {
-    var table = document.getElementById("timeTable");
-    var rows = table.getElementsByTagName("tr");
-    for (i = 0; i < rows.length; i++) {
-        var currentRow = table.rows[i];
-        var createClickHandler = 
-            function(row) 
-            {
-                return function() 
-                { 
-                    var tempId = row.getElementsByTagName("td")[0];
-                    var tempName = row.getElementsByTagName("td")[1];
-                    var tempTime = row.getElementsByTagName("td")[2];
-                    var id = tempId.innerHTML;
-                    var name = tempName.innerHTML;
-                    var time = tempTime.innerHTML;
-                    var result = confirm("Use this time?\n" + name + ": " + time);
-                    if(result)
-                    {
-//                        location.reload();
-                        document.location.href = "TimelineController?del=1&" + "id=" + id;
-//                        document.getElementById("rowName").value= name + " : " + time;
-                    }   
-                };
-            };  
-
-        currentRow.onclick = createClickHandler(currentRow);
+function validation()
+{
+    var timeHour = document.getElementsByName("timeHour_txt")[0];
+    var timeMinute = document.getElementsByName("timeMinute_txt")[0];
+    
+    if(timeHour.value == "0" && timeMinute.value == "0")
+    {
+        return false;
+    }
+    
+    else
+    {
+        return true;
     }
 }
 
+//Clicked row in table. Confirm box will appear
+function addRowHandlers() {
+    if(type != "used")
+    {
+        var table = document.getElementById("timeTable");
+        var rows = table.getElementsByTagName("tr");
+        for (i = 0; i < rows.length; i++) {
+            var currentRow = table.rows[i];
+            var createClickHandler = 
+                function(row) 
+                {
+                    return function() 
+                    { 
+                        var tempId = row.getElementsByTagName("td")[0];
+                        var tempComments = row.getElementsByTagName("td")[1];
+                        var tempName = row.getElementsByTagName("td")[2];
+                        var tempTime = row.getElementsByTagName("td")[3];
+                        var tempType = row.getElementsByTagName("td")[5];
+                        var id = tempId.innerHTML;
+                        var comments = tempComments.innerHTML;
+                        var name = tempName.innerHTML;
+                        var time = tempTime.innerHTML;
+                        if((type == "all" && tempType.innerHTML == "unused") || type == "unused")
+                        {
+                           var result = confirm("Use this time?\n" + name + ": " + time
+                                   + "\n\nComments: \"" + comments + ".\"");
+                            if(result)
+                            {
+                                document.location.href = "TimelineController?del=1&" + "id=" + id;
+                            } 
+                        }
+                    };
+                };  
+
+            currentRow.onclick = createClickHandler(currentRow);
+        }
+    }
+    
+}
+
+//When focus leave on time hour/minute, if not blank the other's value will be "0"
+function onBlur(timeBox)
+{
+   if(timeBox.value != "" || timeBox.value != "0")
+   {
+       var time = null;
+       if(timeBox.name == "timeHour_txt")
+       {
+            time = document.getElementsByName("timeMinute_txt")[0];
+            if(time.value == "")
+            {
+                time.value = "0";  
+            }
+       }
+       
+       else
+       {
+           
+           time = document.getElementsByName("timeHour_txt")[0];
+           if(time.value == "")
+           {
+               time.value = "0";
+           }
+       }
+   }
+}
+
+function getTimelineTarget(e)
+{
+    e = e || window.event;
+    return e.target || e.srcElement;
+}
+
+var ul = document.getElementById("timeline_ul");
+ul.onclick = function(event)
+{
+    var target = getTimelineTarget(event);
+    var targetIH = target.innerHTML;
+    if(targetIH == "Timeline(ALL)")
+    {
+        t = "all";
+    }
+    
+    else if(targetIH == "Timeline(Unused)")
+    {
+        t = "unused";
+    }
+    
+    else if(targetIH == "Timeline(Used)")
+    {
+        t = "used";
+    }
+    document.location.href = "TimelineController?timeLineType=" + t;
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
 window.onload = addRowHandlers();
+
 
 
 

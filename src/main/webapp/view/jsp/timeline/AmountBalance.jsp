@@ -4,37 +4,34 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="<c:url value="/view/css/timelinecss.css" />" rel="stylesheet">
+        <link href="<c:url value="/view/css/AmountBalancecss.css" />" rel="stylesheet">
         <link href="<c:url value="/view/css/TimelineDesignCss.css" />" rel="stylesheet">
         <title>JSP Page</title>
+        <script src="<c:url value="/view/js/jquery321.js"/>"></script>
     </head>
     <body>
         <jsp:include page="../pageHeader.jsp"/>
         <a id="back_btn" href="${pageContext.request.contextPath}/HomeController"> Back <--</a>
-        <a id="title_btn" href="${pageContext.request.contextPath}/TimelineController"> Account Balance Management </a>
-        <div id="wrapper">
+        <a id="title_btn" href="${pageContext.request.contextPath}/AmountBalanceController"> Account Balance Management </a>
+        <div id="wrapper">    
             <div id="leftColumn" class="columns">
                 <div id="customerColumn">
-                    <form action="TimelineController" name="addForm">   
+                    <form action="AmountBalanceController" name="addForm">   
                         <table id="rowClick">
                             <tr>
                                 <td>
                                     Name:
                                 </td>
                                 <td>
-                                    <input class="inputsText_cls" type="textbox" name="custName_txt" required style="width: 100%;">
-                                </td>
-                                <td>
-                                    
+                                    <input class="inputsText_cls" type="textbox" name="custName_txt" id="custName_txt" required>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    Time:
+                                    Amount:
                                 </td>
                                 <td>
-                                    <input class="inputsText_cls" type="number" name="timeHour_txt"  onblur="onBlur(this)" required style="width: 30%;"><p style="font-size: 15px; display:inline;">hour</p>
-                                    <input class="inputsText_cls" type="number" name="timeMinute_txt"  onblur="onBlur(this)" required style="width: 30%;"><p style="font-size: 15px; display:inline;">min</p>
+                                    <input class="inputsText_cls" type="number" name="amount_txt" id="amount_txt" required>
                                 </td>
                             </tr>
                             <tr>
@@ -42,8 +39,8 @@
                                     
                                 </td>
                                 <td>
-                                    <input class="customerBtn_cls" type="submit" name="addBalance_btn" value="add" onclick="return validation()">
-                                    <input class="customerBtn_cls" type="reset" name="clearBalance_btn" value="clear">
+                                    <input class="customerBtn_cls" type="submit" name="addBalance_btn" value="Add">
+                                    <input class="customerBtn_cls" type="reset" name="clearBalance_btn" value="Clear">
                                 </td>
                                 
                             </tr>
@@ -51,24 +48,24 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <input type="button" name="balance20Mins_btn" class="amountButton" value="20 min" onClick="setTime(this)">
-                                    <input type="button" name="balance30Mins_btn" class="amountButton" value="30 min" onClick="setTime(this)">
+                                    <input class="amountButton" type="button" id="amount5_btn" value="P5.00">
+                                    <input class="amountButton" type="button" id="amount8_btn" value="P8.00" onClick="setTime(this)">
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                 </td>
                                 <td>
-                                    <input type="button" name="balance40Mins_btn" class="amountButton" value="40 min" onClick="setTime(this)">
-                                    <input type="button" name="balance60Mins_btn" class="amountButton" value="60 min" onClick="setTime(this)">
+                                    <input type="button" id="amount10_btn" class="amountButton" value="P10.00" onClick="setTime(this)">
+                                    <input type="button" id="amount15_btn" class="amountButton" value="P15.00" onClick="setTime(this)">
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                 </td>
                                 <td>
-                                    <input type="button" name="balance80Mins_btn" class="amountButton" value="80 min" onClick="setTime(this)">
-                                    <input type="button" name="balance120Mins_btn" class="amountButton" value="120 min" onClick="setTime(this)">
+                                    <input type="button" id="amount20_btn" class="amountButton" value="P20.00" onClick="setTime(this)">
+                                    <input type="button" id="amount25_btn" class="amountButton" value="P25.00" onClick="setTime(this)">
                                 </td>
                             </tr>
                         </table>
@@ -82,8 +79,8 @@
                         <li id="timeLineMain">Timeline(Unused)
                             <ul>
                                 <li>Timeline(ALL)</li>
-                                <li>Timeline(Unused)</li>
-                                <li>Timeline(Used)</li>
+                                <li>Timeline(Unpaid)</li>
+                                <li>Timeline(Paid)</li>
                             </ul>
                         </li>
                         <li>Transaction</li>
@@ -98,7 +95,7 @@
                     <tr>
                         <th style="display:none">ID</th>
                         <th>Customer</th>
-                        <th>Balance Time</th>
+                        <th>Amount</th>
                         <th>Date</th>
                         <c:if test = "${timeLineType == 'all'}">
                             <th>Type</th>
@@ -106,15 +103,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${timeProp}" var="_timeProp">
+                    <c:forEach items="${balanceProp}" var="_balanceProp">
                         <tr>
-                            <td style="display:none"><c:out value="${_timeProp.tb_id}"/></td>
-                            <td style="display: none;"><c:out value="${_timeProp.tb_comments}"/></td>
-                            <td><c:out value="${_timeProp.tb_customername}"/></td>
-                            <td><c:out value="${_timeProp.tb_time}"/></td>
-                            <td><c:out value="${_timeProp.tb_date}"/></td>
+                            <td style="display:none"><c:out value="${_balanceProp.ab_id}"/></td>
+                            <td style="display:none"><c:out value="${_balanceProp.ab_comments}"/></td>
+                            <td><c:out value="${_balanceProp.ab_customername}"/></td>
+                            <td><c:out value="${_balanceProp.ab_amount}"/></td>
+                            <td><c:out value="${_balanceProp.ab_date}"/></td>
                             <c:if test = "${timeLineType =='all'}">
-                                <td>${_timeProp.tb_type}</td>
+                                <td>${_balanceProp.ab_type}</td>
                             </c:if>
                         </tr>
                     </c:forEach>
@@ -122,9 +119,6 @@
                 </table>
             </div>
         </div>
-        
     </body>
-        <script src="<c:url value="/view/js/jquery321.js"/>"></script>
-        <script src="<c:url value="/view/js/timeline.js"/>"></script>
-        
+        <script src="<c:url value="/view/js/AmountBalance.js"/>"></script>
 </html>

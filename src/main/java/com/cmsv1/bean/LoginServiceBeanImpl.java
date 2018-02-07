@@ -31,4 +31,27 @@ public class LoginServiceBeanImpl implements LoginServiceBean
         _sqliteConnection.closeConnections();
         return isValid;
     }
+    
+    public String retrieveUserFullName(String userName, String passWord) throws SQLException
+    {
+        SQLiteConfiguration _sqliteConnection = new SQLiteConfiguration();
+        String userFullName = null;
+        ResultSet rs = null;
+        try
+          {
+            rs = _sqliteConnection.myStmt.executeQuery("select ad_name from admins where ad_user='"+ userName +"' and ad_pass='"+ passWord +"';");
+            
+            while(rs.next())
+              {
+                userFullName = rs.getString("ad_name");
+              }
+          }
+        catch (Exception ex)
+          {
+            Logger.getLogger(LoginServiceBeanImpl.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        rs.close();
+        _sqliteConnection.closeConnections();
+        return userFullName;
+    }
 }

@@ -14,4 +14,5 @@ import java.sql.SQLException;
 public interface LoginServiceBean
 {
    public boolean isUserValid(String userName, String passWord) throws SQLException;
+   public String retrieveUserFullName(String userName, String passWord) throws SQLException;
 }
