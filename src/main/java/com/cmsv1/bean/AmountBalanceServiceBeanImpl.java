@@ -31,17 +31,17 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
         {
             if(timeLineType.equals("all"))
             {
-                query = "select ab_id, ab_customername, ab_amount, ab_date, replace(replace(ab_active,'0','Paid'),'1','Unpaid') as ab_active, ab_comments from amount_balance order by ab_id desc;";
+                query = "select ab_id, ab_customername, ab_amount, ab_date, replace(replace(ab_active,'0','Paid'),'1','Unpaid') as ab_active, ab_comments, ab_createby, ab_updateby from amount_balance order by ab_id desc;";
             }
             
             else if(timeLineType.equals("unpaid"))
             {
-                query = "select ab_id, ab_customername, ab_amount, ab_date, replace(ab_active,'1','Unpaid') as ab_active, ab_comments from amount_balance where ab_active='1' order by ab_id desc;";
+                query = "select ab_id, ab_customername, ab_amount, ab_date, replace(ab_active,'1','Unpaid') as ab_active, ab_comments, ab_createby, ab_updateby from amount_balance where ab_active='1' order by ab_id desc;";
             }
             
             else if(timeLineType.equals("paid"))
             {
-                query = "select ab_id, ab_customername, ab_amount, ab_date, replace(ab_active,'0','Paid') as ab_active, ab_comments from amount_balance where ab_active='0' order by ab_id desc;";
+                query = "select ab_id, ab_customername, ab_amount, ab_date, replace(ab_active,'0','Paid') as ab_active, ab_comments, ab_createby, ab_updateby from amount_balance where ab_active='0' order by ab_id desc;";
             }
             rs = _sql.myStmt.executeQuery(query);
             while(rs.next())
@@ -53,6 +53,8 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
                 ab.setAb_date(rs.getString("ab_date"));
                 ab.setAb_type(rs.getString("ab_active"));
                 ab.setAb_comments(rs.getString("ab_comments"));
+                ab.setAb_createBy(rs.getString("ab_createby"));
+                ab.setAb_updateBy(rs.getString("ab_updateby"));
                 propList.add(ab);
             }
             rs.close();
@@ -72,7 +74,7 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
             SimpleDateFormat sdfDate = new SimpleDateFormat("MMMMM d, yyyy - h:mma (EEEE)");//dd/MM/yyyy
             Date now = new Date();
             String dateNow = sdfDate.format(now);
-            _sql.myStmt.executeQuery("insert into amount_balance(ab_customername, ab_amount, ab_comments, ab_date, ab_createby) values ('" + custName + "','" + amount + "','" + comments + "','" + dateNow + "','" + adminFullName + "');");
+            _sql.myStmt.executeQuery("insert into amount_balance(ab_customername, ab_amount, ab_comments, ab_date, ab_createby) values ('" + custName + "','" + amount + "','" + (comments.equals("") || comments == null ? "No Comment" : comments) + "','" + dateNow + "','" + adminFullName + "');");
             _sql.closeConnections();
         }
         catch (Exception e)

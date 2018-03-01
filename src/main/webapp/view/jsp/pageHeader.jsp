@@ -15,8 +15,23 @@
     {
         position: absolute;
     }
+    
+    #logout_lbl
+    {
+        position: absolute;
+        left: 90%;
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+    }
+    
+    #logout_lbl:hover
+    {
+        color: red;
+    }
 </style>
 
 <div id="moduleDiv">
     <h1 od="companyName">Cafe Management System</h1>
+    <a href="${pageContext.request.contextPath}/LoginPage" id="logout_lbl">Logout...</a>
 </div>

@@ -5,9 +5,15 @@
  */
 package com.cmsv1.controller;
 
+import java.io.IOException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -17,9 +23,20 @@ import org.springframework.web.servlet.ModelAndView;
 public class HomeController
 {
     @RequestMapping("/HomeController")
-    public String homeController()
+    public void homeController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-       return "view/jsp/home/home.jsp";
+        HttpSession session = request.getSession();
+        boolean adminLogged = ((session.getAttribute("adminFullName")== "" || session.getAttribute("adminFullName") == null) ? false:true);
+        if(adminLogged)
+        {
+            RequestDispatcher rd = request.getRequestDispatcher("view/jsp/home/home.jsp");
+            rd.forward(request, response);
+        }
+        
+        else
+        {
+            response.sendRedirect("LoginPage");
+        }
     }
     
     @RequestMapping("/HomePage")

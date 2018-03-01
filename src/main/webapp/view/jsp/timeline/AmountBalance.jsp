@@ -6,13 +6,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="<c:url value="/view/css/AmountBalancecss.css" />" rel="stylesheet">
         <link href="<c:url value="/view/css/TimelineDesignCss.css" />" rel="stylesheet">
-        <title>JSP Page</title>
-        <script src="<c:url value="/view/js/jquery321.js"/>"></script>
+        <title>Cafe Management System</title>
     </head>
     <body>
         <jsp:include page="../pageHeader.jsp"/>
         <a id="back_btn" href="${pageContext.request.contextPath}/HomeController"> Back <--</a>
-        <a id="title_btn" href="${pageContext.request.contextPath}/AmountBalanceController"> Account Balance Management </a>
+        <a id="title_btn" href="${pageContext.request.contextPath}/AmountBalanceController"> Money Balance Management </a>
         <div id="wrapper">    
             <div id="leftColumn" class="columns">
                 <div id="customerColumn">
@@ -97,8 +96,10 @@
                         <th>Customer</th>
                         <th>Amount</th>
                         <th>Date</th>
-                        <c:if test = "${timeLineType == 'all'}">
+                        <c:if test = "${timeLineType == 'all' || timeLineType == 'paid'}">
                             <th>Type</th>
+                            <th>Added By</th>
+                            <th>Updated By</th>
                         </c:if>
                     </tr>
                     </thead>
@@ -110,8 +111,10 @@
                             <td><c:out value="${_balanceProp.ab_customername}"/></td>
                             <td><c:out value="${_balanceProp.ab_amount}"/></td>
                             <td><c:out value="${_balanceProp.ab_date}"/></td>
-                            <c:if test = "${timeLineType =='all'}">
+                            <c:if test = "${timeLineType =='all' || timeLineType =='paid'}">
                                 <td>${_balanceProp.ab_type}</td>
+                                <td>${_balanceProp.ab_createBy}</td>
+                                <td>${_balanceProp.ab_updateBy}</td>
                             </c:if>
                         </tr>
                     </c:forEach>
@@ -120,5 +123,6 @@
             </div>
         </div>
     </body>
+        <script src="<c:url value="/view/js/jquery321.js"/>"></script>
         <script src="<c:url value="/view/js/AmountBalance.js"/>"></script>
 </html>

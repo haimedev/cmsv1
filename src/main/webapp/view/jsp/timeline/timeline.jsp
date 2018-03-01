@@ -6,12 +6,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="<c:url value="/view/css/timelinecss.css" />" rel="stylesheet">
         <link href="<c:url value="/view/css/TimelineDesignCss.css" />" rel="stylesheet">
-        <title>JSP Page</title>
+        <title>Cafe Management System</title>
     </head>
     <body>
         <jsp:include page="../pageHeader.jsp"/>
         <a id="back_btn" href="${pageContext.request.contextPath}/HomeController"> Back <--</a>
-        <a id="title_btn" href="${pageContext.request.contextPath}/TimelineController"> Account Balance Management </a>
+        <a id="title_btn" href="${pageContext.request.contextPath}/TimelineController"> Free Time Management </a>
         <div id="wrapper">
             <div id="leftColumn" class="columns">
                 <div id="customerColumn">
@@ -22,7 +22,7 @@
                                     Name:
                                 </td>
                                 <td>
-                                    <input class="inputsText_cls" type="textbox" name="custName_txt" required style="width: 100%;">
+                                    <input class="inputsText_cls" type="textbox" name="custName_txt" id="custName_txt" required style="width: 100%;">
                                 </td>
                                 <td>
                                     
@@ -33,8 +33,8 @@
                                     Time:
                                 </td>
                                 <td>
-                                    <input class="inputsText_cls" type="number" name="timeHour_txt"  onblur="onBlur(this)" required style="width: 30%;"><p style="font-size: 15px; display:inline;">hour</p>
-                                    <input class="inputsText_cls" type="number" name="timeMinute_txt"  onblur="onBlur(this)" required style="width: 30%;"><p style="font-size: 15px; display:inline;">min</p>
+                                    <input class="inputsText_cls" type="number" name="timeHour_txt"  onblur="onBlur(this)" required style="width: 28%;"><p style="font-size: 15px; display:inline;">hour</p>
+                                    <input class="inputsText_cls" type="number" name="timeMinute_txt"  onblur="onBlur(this)" required style="width: 28%;"><p style="font-size: 15px; display:inline;">min</p>
                                 </td>
                             </tr>
                             <tr>
@@ -78,46 +78,59 @@
             </div>
             <div id="upperColumn" class="columns">
                 <div class="nav">
-                    <ul id="timeline_ul">
+                    <ul>
                         <li id="timeLineMain">Timeline(Unused)
-                            <ul>
+                            <ul id="timeline_ul">
                                 <li>Timeline(ALL)</li>
                                 <li>Timeline(Unused)</li>
                                 <li>Timeline(Used)</li>
                             </ul>
                         </li>
                         <li>Transaction</li>
-                        <li>Reports</li>
+                        <li><a href="${pageContext.request.contextPath}/ReportController" style="text-decoration: none;">Reports</a></li>
                     </ul>
                 </div>
             </div>
             <div id="rightColumn" class="columns">
                 <table id="timeTable">
                     <thead>
-                        
-                    <tr>
-                        <th style="display:none">ID</th>
-                        <th>Customer</th>
-                        <th>Balance Time</th>
-                        <th>Date</th>
-                        <c:if test = "${timeLineType == 'all'}">
-                            <th>Type</th>
-                        </c:if>
-                    </tr>
+                        <tr>
+                            <th style="display:none">ID</th>
+                            <th>Customer</th>
+                            <th>Free Time</th>
+                            <th>Date</th>
+                            <c:choose>
+                                <c:when test = "${timeLineType == 'all' || timeLineType == 'paid'}">
+                                    <th>Type</th>
+                                    <th>Added By</th>
+                                    <th>Used By</th>
+                                </c:when>
+                                <c:otherwise>
+                                    <th>Added By</th>
+                                </c:otherwise>
+                            </c:choose>
+                        </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${timeProp}" var="_timeProp">
-                        <tr>
-                            <td style="display:none"><c:out value="${_timeProp.tb_id}"/></td>
-                            <td style="display: none;"><c:out value="${_timeProp.tb_comments}"/></td>
-                            <td><c:out value="${_timeProp.tb_customername}"/></td>
-                            <td><c:out value="${_timeProp.tb_time}"/></td>
-                            <td><c:out value="${_timeProp.tb_date}"/></td>
-                            <c:if test = "${timeLineType =='all'}">
-                                <td>${_timeProp.tb_type}</td>
-                            </c:if>
-                        </tr>
-                    </c:forEach>
+                        <c:forEach items="${timeProp}" var="_timeProp">
+                            <tr>
+                                <td style="display:none"><c:out value="${_timeProp.tb_id}"/></td>
+                                <td style="display: none;"><c:out value="${_timeProp.tb_comments}"/></td>
+                                <td><c:out value="${_timeProp.tb_customername}"/></td>
+                                <td><c:out value="${_timeProp.tb_time}"/></td>
+                                <td><c:out value="${_timeProp.tb_date}"/></td>
+                                <c:choose>
+                                    <c:when test = "${timeLineType =='all' || timeLineType == 'paid'}">
+                                        <td>${_timeProp.tb_type}</td>
+                                        <td>${_timeProp.tb_createBy}</td>
+                                        <td>${_timeProp.tb_updateBy}</td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>${_timeProp.tb_createBy}</td>
+                                    </c:otherwise>
+                                </c:choose>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>

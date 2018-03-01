@@ -65,8 +65,10 @@ public class LoginController
     }
     
     @RequestMapping("/LoginPage")
-    public String getLoginPage()
+    public String getLoginPage(HttpServletRequest request, HttpServletResponse response)
     {
+        HttpSession session = request.getSession();
+        session.removeAttribute("adminFullName");
         return "view/jsp/login/login.jsp";
     }
 }

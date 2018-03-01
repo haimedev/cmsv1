@@ -25,6 +25,7 @@ public class TimelineController
         try
         {
             HttpSession session = request.getSession();
+            session.setAttribute("page", "pg_tb");
             String adminFullName = session.getAttribute("adminFullName").toString();
             String timeLineType = "unused";
             TimelineServiceBeanImpl _serviceBean = new TimelineServiceBeanImpl();

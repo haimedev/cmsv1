@@ -1,12 +1,12 @@
 #moduleTbl
 {
-    position:absolute;
-    top: 70px;
-    left: 50%;
+    position: relative;
+    top: 0px;
+    left: 55%;
 }
 
 .moduleImg
 {
-    padding-right: 50px; 
+    padding-right: 20px; 
     opacity:0.9;
 }

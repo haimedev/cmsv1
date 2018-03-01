@@ -71,7 +71,13 @@ ul.onclick = function(event)
     {
         t = "paid";
     }
+    
+    else if(targetIH == "Reports")
+    {
+        
+    }
     document.location.href = "AmountBalanceController?timeLineType=" + t;
+    
 };
 
 function getParameterByName(name, url) {
@@ -84,9 +90,10 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
+//onload function
 $(function ()
 {
-    //$("#leftColumn").slideUp(1000).slideDown(500);
+    
 });
 
 window.onload = addRowHandlers();

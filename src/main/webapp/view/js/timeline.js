@@ -32,11 +32,6 @@ function setTime(button)
     }
 }
 
-$(document).ready(function()
-{
-    
-});
-
 function validation()
 {
     var timeHour = document.getElementsByName("timeHour_txt")[0];
@@ -159,6 +154,11 @@ function getParameterByName(name, url) {
 }
 
 window.onload = addRowHandlers();
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 
 
 

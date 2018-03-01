@@ -17,7 +17,26 @@ public class AmountBalanceProp
     public String ab_date;
     public String ab_comments;
     public String ab_type;
+    public String ab_createBy;
+    public String ab_updateBy;
 
+    public String getAb_createBy() {
+        return ab_createBy;
+    }
+
+    public void setAb_createBy(String ab_createBy) {
+        this.ab_createBy = ab_createBy;
+    }
+
+    public String getAb_updateBy() {
+        return ab_updateBy;
+    }
+
+    public void setAb_updateBy(String ab_updateBy) {
+        this.ab_updateBy = ab_updateBy;
+    }
+
+    
     public String getAb_comments()
     {
         return ab_comments;

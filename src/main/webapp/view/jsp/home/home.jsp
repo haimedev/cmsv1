@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="<c:url value="/view/css/homecss.css"/>" rel="stylesheet">
-        <title>JSP Page</title>
+        <title>Cafe Management System</title>
     </head>
     <body>
         <jsp:include page="../pageHeader.jsp"/>

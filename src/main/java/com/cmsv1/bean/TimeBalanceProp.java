@@ -17,7 +17,26 @@ public class TimeBalanceProp
     public String tb_customername;
     public String tb_type;
     public String tb_comments;
+    public String tb_createBy;
+    public String tb_updateBy;
 
+    public String getTb_createBy() {
+        return tb_createBy;
+    }
+
+    public void setTb_createBy(String tb_createBy) {
+        this.tb_createBy = tb_createBy;
+    }
+
+    public String getTb_updateBy() {
+        return tb_updateBy;
+    }
+
+    public void setTb_updateBy(String tb_updateBy) {
+        this.tb_updateBy = tb_updateBy;
+    }
+
+    
     public String getTb_comments()
     {
         return tb_comments;

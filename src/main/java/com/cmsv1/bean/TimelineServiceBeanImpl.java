@@ -17,10 +17,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 public class TimelineServiceBeanImpl implements TimelineServiceBean
 {
     SQLiteConfiguration _sql = new SQLiteConfiguration();
+    
     public List<TimeBalanceProp> getTimeBalance(String timeLineType)
     {
         List<TimeBalanceProp> propList = new ArrayList<>();
@@ -30,17 +33,17 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         {
             if(timeLineType.equals("all"))
             {
-                query = "select tb_id, tb_customername, tb_time, tb_date, replace(replace(tb_active,'0','used'),'1','unused') as tb_active, tb_comments from time_balance order by tb_id desc;";
+                query = "select tb_id, tb_customername, tb_time, tb_date, replace(replace(tb_active,'0','used'),'1','unused') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance order by tb_id desc;";
             }
             
             else if(timeLineType.equals("unused"))
             {
-                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'1','unused') as tb_active, tb_comments from time_balance where tb_active='1' order by tb_id desc;";
+                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'1','unused') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance where tb_active='1' order by tb_id desc;";
             }
             
             else if(timeLineType.equals("used"))
             {
-                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'0','used') as tb_active, tb_comments from time_balance where tb_active='0' order by tb_id desc;";
+                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'0','used') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance where tb_active='0' order by tb_id desc;";
             }
             rs = _sql.myStmt.executeQuery(query);
             while(rs.next())
@@ -52,6 +55,8 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
                 tb.setTb_customername(rs.getString("tb_customername"));
                 tb.setTb_type(rs.getString("tb_active"));
                 tb.setTb_comments(rs.getString("tb_comments"));
+                tb.setTb_createBy(rs.getString("tb_createby"));
+                tb.setTb_updateBy(rs.getString("tb_updateby"));
                 propList.add(tb);
             }
             rs.close();
@@ -70,6 +75,7 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         {
             //SimpleDateFormat dateNow = new SimpleDateFormat("MM/dd/yyyy HH:mm");
             String time = "";
+            custName = WordUtils.capitalizeFully(custName);
             SimpleDateFormat sdfDate = new SimpleDateFormat("MMMMM d, yyyy - h:mma (EEEE)");//dd/MM/yyyy
             Date now = new Date();
             String dateNow = sdfDate.format(now);
@@ -89,7 +95,7 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
             }
             
             
-            _sql.myStmt.executeQuery("insert into time_balance(tb_customername, tb_time, tb_date, tb_comments, tb_createby) values ('" + custName + "','" + time + "','" + dateNow + "','" + comments + "','" + adminFullName + "');");
+            _sql.myStmt.executeQuery("insert into time_balance(tb_customername, tb_time, tb_date, tb_comments, tb_createby) values ('" + custName + "','" + time + "','" + dateNow + "','" + (comments.equals("") || comments == null ? "No Comment" : comments) + "','" + adminFullName + "');");
             _sql.closeConnections();
         }
         catch (Exception e)

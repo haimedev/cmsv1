@@ -26,7 +26,7 @@ public class SQLiteConfiguration
         try
           {
             Class.forName("org.sqlite.JDBC");
-            myConn = DriverManager.getConnection("jdbc:sqlite:E:\\Java Web Projects\\CMSv1\\CMSv1\\target\\CMSv1-1.0-SNAPSHOT\\WEB-INF\\lib\\cmsv1.sqlite");
+            myConn = DriverManager.getConnection("jdbc:sqlite:E:\\Programs\\CMSv1\\sqliteDB\\cmsv1.sqlite");
             myStmt = myConn.createStatement();
           }
         catch (Exception e)
