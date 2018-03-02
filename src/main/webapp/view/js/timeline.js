@@ -160,6 +160,26 @@ function toTitleCase(str)
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
+$("#add_frm").submit(function()
+{
+    var customerNames = document.getElementById("customer_lst");
+    var customerName_txt = $("#custName_txt").val();
+    alert(customerName_txt.substr(0,1).toUpperCase()+customerName_txt.substr(1));
+    var tempCustomerNames = [];
+    for(var i =0; i < customerNames.options.length; i++)
+    {
+        tempCustomerNames.push(customerNames.options[i].value);
+    }
+    
+    $.each(tempCustomerNames, function(index, value)
+    {
+        
+    });
+    
+    
+    return false;
+});
+
 
 
 

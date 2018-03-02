@@ -60,6 +60,7 @@ public class TimelineController
             List<TimeBalanceProp> propList = _serviceBean.getTimeBalance(timeLineType);
             request.setAttribute("timeProp", propList);
             request.setAttribute("timeLineType", timeLineType);
+            request.setAttribute("customers", _serviceBean.readCustomers());
             RequestDispatcher rd = request.getRequestDispatcher("view/jsp/timeline/timeline.jsp");
             rd.forward(request, response);
         }

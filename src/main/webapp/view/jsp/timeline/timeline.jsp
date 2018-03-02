@@ -15,14 +15,19 @@
         <div id="wrapper">
             <div id="leftColumn" class="columns">
                 <div id="customerColumn">
-                    <form action="TimelineController" name="addForm">   
+                    <form action="TimelineController" id="add_frm" name="addForm">   
                         <table id="rowClick">
                             <tr>
                                 <td>
                                     Name:
                                 </td>
                                 <td>
-                                    <input class="inputsText_cls" type="textbox" name="custName_txt" id="custName_txt" required style="width: 100%;">
+                                    <input class="inputsText_cls" list="customer_lst" name="custName_txt" id="custName_txt" required style="width: 100%;" autocomplete="off">
+                                        <datalist id="customer_lst">
+                                            <c:forEach items="${customers}" var="_customers">
+                                                <option value="<c:out value="${_customers}"/>">
+                                            </c:forEach>
+                                        </datalist>
                                 </td>
                                 <td>
                                     

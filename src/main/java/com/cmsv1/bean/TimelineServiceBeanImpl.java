@@ -22,10 +22,10 @@ import org.apache.commons.lang3.text.WordUtils;
 
 public class TimelineServiceBeanImpl implements TimelineServiceBean
 {
-    SQLiteConfiguration _sql = new SQLiteConfiguration();
     
     public List<TimeBalanceProp> getTimeBalance(String timeLineType)
     {
+        SQLiteConfiguration _sql = new SQLiteConfiguration();
         List<TimeBalanceProp> propList = new ArrayList<>();
         String query = "";
         ResultSet rs = null;
@@ -71,6 +71,7 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
     
     public void createTimeBalance(String adminFullName, String custName, String timeHour, String timeMinute, String comments)
     {
+        SQLiteConfiguration _sql = new SQLiteConfiguration();
         try
         {
             //SimpleDateFormat dateNow = new SimpleDateFormat("MM/dd/yyyy HH:mm");
@@ -106,6 +107,7 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
     
     public void deleteTimeBalance(String adminFullName, String id)
     {
+        SQLiteConfiguration _sql = new SQLiteConfiguration();
         try
         {
             if(!id.equals(""))
@@ -118,5 +120,27 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         {
             e.getStackTrace();
         }
+    }
+    
+    public List<String> readCustomers()
+    {
+        SQLiteConfiguration _sql = new SQLiteConfiguration();
+        List<String> customerNames = new ArrayList<>();
+        ResultSet rs = null;
+        try
+        {
+            rs = _sql.myStmt.executeQuery("select ctm_fullname from customers where ctm_active='1' order by ctm_fullname asc;");
+            
+            while(rs.next())
+            {
+                customerNames.add(rs.getString("ctm_fullname"));
+            }
+            rs.close();
+            _sql.closeConnections();
+        }
+        catch (Exception e)
+        {
+        }
+        return customerNames;
     }
 }

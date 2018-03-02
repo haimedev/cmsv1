@@ -152,44 +152,6 @@ ul li ul li:hover
     cursor: pointer;
 }
 
-
-#timeTable
-{
-    border-collapse: collapse;
-    width: 100%;
-    text-align: left;
-}
-
-#timeTable th
-{
-    background-color: #3249e6;
-    padding: 5px 5px 5px 5px;
-    color: white;
-    padding: 8px;
-}
-
-#timeTable tr:nth-child(even)
-{
-    background-color: #cdd4ff;
-}
-
-#timeTable tr:nth-child(odd)
-{
-    background-color: #ffffff;
-}
-
-#timeTable tr:hover
-{
-    background-color: #3c55ff;
-}
-
-table tr.active {background: #ccc;}
-
-#timeTable td
-{
-    padding: 2px 0px 2px 5px;
-}
-
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button 
 input[type=date]::-webkit-inner-spin-button, 
@@ -197,5 +159,11 @@ input[type=date]::-webkit-outer-spin-button {
 
    opacity: 1;
 
+}
+
+.calendar
+{
+    color: red;
+    margin-right: 20px;
 }
 

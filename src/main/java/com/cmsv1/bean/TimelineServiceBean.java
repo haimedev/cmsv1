@@ -17,4 +17,5 @@ public interface TimelineServiceBean
     public List<TimeBalanceProp> getTimeBalance(String timeLineType);
     public void createTimeBalance(String adminFullName, String custName, String timeHour, String timeMinute, String comments);
     public void deleteTimeBalance(String adminFullName, String timeId);
+    public List<String> readCustomers();
 }

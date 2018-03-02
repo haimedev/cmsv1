@@ -47,7 +47,7 @@
                     <c:out value="${reportElements}" escapeXml="false"/>
                 </div>
                 <br> <br>
-                <button>Generate</button>
+                <button id="generateReport_btn">Generate</button>
             </div>
         </div>
     </body>

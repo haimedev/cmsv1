@@ -9,6 +9,7 @@ import com.cmsv1.sqlconnection.SQLiteConfiguration;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.text.WordUtils;
 
 public class ReportsServiceBeanImpl implements ReportsServiceBean 
 {
@@ -68,15 +69,21 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
     
     private String createElement(String label, String type)
     {
+        label = WordUtils.capitalizeFully(label);
         String returnHTML = "";
+        if(!type.equals("calendar"))
+        {
+            returnHTML = "<br/><br/>";
+        }
+        
         if(type.equals("calendar"))
         {
-            returnHTML = "<label>" + label + ": </label><input id=\"" + label + "_cal\" type=\"date\"/>";
+            returnHTML = "<label>" + label + ": </label><input id=\"" + label + "_cal\" class=\"calendar\" type=\"date\"/>";
         }
         
         else if(type.equals("textbox"))
         {
-            returnHTML = "<label>" + label + ": </label><input id=\""+ label + "_txt\" type=\"text\"/>";
+            returnHTML += "<label>" + label + ": </label><input id=\""+ label + "_txt\" class=\"calendar\" type=\"text\"/>";
         }
         return returnHTML;
     }
