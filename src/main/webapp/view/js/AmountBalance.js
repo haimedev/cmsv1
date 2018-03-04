@@ -98,6 +98,30 @@ $(function ()
 
 window.onload = addRowHandlers();
 
+$("#add_frm").submit(function()
+{
+    var customerNames = document.getElementById("customer_lst");
+    var customerName_txt = $("#custName_txt").val();
+    var tempCustomerNames = [];
+    for(var i =0; i < customerNames.options.length; i++)
+    {
+        tempCustomerNames.push(customerNames.options[i].value);
+    }
+    
+    if(tempCustomerNames.includes(customerName_txt))
+    {
+        return true;
+    }
+    
+    else
+    {
+        alert("Please enter a valid name.");
+        return false;
+    }
+    
+    
+});
+
 
 
 

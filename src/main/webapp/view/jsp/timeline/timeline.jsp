@@ -105,7 +105,7 @@
                             <th>Free Time</th>
                             <th>Date</th>
                             <c:choose>
-                                <c:when test = "${timeLineType == 'all' || timeLineType == 'paid'}">
+                                <c:when test = "${timeLineType == 'all' || timeLineType == 'used'}">
                                     <th>Type</th>
                                     <th>Added By</th>
                                     <th>Used By</th>

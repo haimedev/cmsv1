@@ -15,14 +15,19 @@
         <div id="wrapper">    
             <div id="leftColumn" class="columns">
                 <div id="customerColumn">
-                    <form action="AmountBalanceController" name="addForm">   
+                    <form action="AmountBalanceController" name="addForm" id="add_frm">   
                         <table id="rowClick">
                             <tr>
                                 <td>
                                     Name:
                                 </td>
                                 <td>
-                                    <input class="inputsText_cls" type="textbox" name="custName_txt" id="custName_txt" required>
+                                    <input class="inputsText_cls" list="customer_lst" name="custName_txt" id="custName_txt" required style="width: 100%;" autocomplete="off">
+                                        <datalist id="customer_lst">
+                                            <c:forEach items="${customers}" var="_customers">
+                                                <option value="<c:out value="${_customers}"/>">
+                                            </c:forEach>
+                                        </datalist>
                                 </td>
                             </tr>
                             <tr>
@@ -96,11 +101,16 @@
                         <th>Customer</th>
                         <th>Amount</th>
                         <th>Date</th>
-                        <c:if test = "${timeLineType == 'all' || timeLineType == 'paid'}">
-                            <th>Type</th>
-                            <th>Added By</th>
-                            <th>Updated By</th>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="${timeLineType=='all' || timeLineType=='paid'}">
+                                <th>Type</th>
+                                <th>Added By</th>
+                                <th>Updated By</th>
+                            </c:when>
+                            <c:otherwise>
+                            <th>Added By
+                            </c:otherwise>
+                        </c:choose>
                     </tr>
                     </thead>
                     <tbody>
@@ -111,11 +121,16 @@
                             <td><c:out value="${_balanceProp.ab_customername}"/></td>
                             <td><c:out value="${_balanceProp.ab_amount}"/></td>
                             <td><c:out value="${_balanceProp.ab_date}"/></td>
-                            <c:if test = "${timeLineType =='all' || timeLineType =='paid'}">
-                                <td>${_balanceProp.ab_type}</td>
-                                <td>${_balanceProp.ab_createBy}</td>
-                                <td>${_balanceProp.ab_updateBy}</td>
-                            </c:if>
+                            <c:choose>
+                                <c:when test="${timeLineType=='all' || timeLineType=='paid'}">
+                                    <td>${_balanceProp.ab_type}</td>
+                                    <td>${_balanceProp.ab_createBy}</td>
+                                    <td>${_balanceProp.ab_updateBy}</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td>${_balanceProp.ab_createBy}</td>
+                                </c:otherwise>
+                            </c:choose>
                         </tr>
                     </c:forEach>
                     </tbody>

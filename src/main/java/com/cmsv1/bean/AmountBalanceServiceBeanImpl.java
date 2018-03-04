@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.apache.commons.lang3.text.WordUtils;
 
 public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
 {
@@ -73,6 +74,7 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
         {
             SimpleDateFormat sdfDate = new SimpleDateFormat("MMMMM d, yyyy - h:mma (EEEE)");//dd/MM/yyyy
             Date now = new Date();
+            custName = WordUtils.capitalizeFully(custName);
             String dateNow = sdfDate.format(now);
             _sql.myStmt.executeQuery("insert into amount_balance(ab_customername, ab_amount, ab_comments, ab_date, ab_createby) values ('" + custName + "','" + amount + "','" + (comments.equals("") || comments == null ? "No Comment" : comments) + "','" + dateNow + "','" + adminFullName + "');");
             _sql.closeConnections();
@@ -97,5 +99,27 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
         {
             e.getStackTrace();
         }
+    }
+    
+    public List<String> readCustomers()
+    {
+        SQLiteConfiguration _sql = new SQLiteConfiguration();
+        List<String> customerNames = new ArrayList<>();
+        ResultSet rs = null;
+        try
+        {
+            rs = _sql.myStmt.executeQuery("select ctm_fullname from customers where ctm_active='1' order by ctm_fullname asc;");
+            
+            while(rs.next())
+            {
+                customerNames.add(rs.getString("ctm_fullname"));
+            }
+            rs.close();
+            _sql.closeConnections();
+        }
+        catch (Exception e)
+        {
+        }
+        return customerNames;
     }
 }

@@ -45,6 +45,7 @@ public class AmountBalanceController
             List<AmountBalanceProp> propList = _serviceBean.getAmountBalance(timeLineType);
             request.setAttribute("balanceProp", propList);
             request.setAttribute("timeLineType", timeLineType);
+            request.setAttribute("customers", _serviceBean.readCustomers());
             RequestDispatcher rd = request.getRequestDispatcher("view/jsp/timeline/AmountBalance.jsp");
             rd.forward(request, response);  
             
