@@ -41,6 +41,13 @@ public class ReportController
                 System.out.println(reportElements);
             }
             
+            else
+            {
+                String reportElements = _serviceBean.createDefaultReportElements(page);
+                request.setAttribute("reportElements", reportElements);
+                System.out.println("here123");
+            }
+            
             RequestDispatcher rd = request.getRequestDispatcher("view/jsp/reports.jsp");
             rd.forward(request, response);
         } 

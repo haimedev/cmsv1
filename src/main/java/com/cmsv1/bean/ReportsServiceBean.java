@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface ReportsServiceBean 
 {
-    public List<ReportsProperties> readPageLabels(String reportId) throws SQLException;
+    public List<ReportsProperties> readPageLabels(String pageId) throws SQLException;
+    public String createDefaultReportElements(String pageId);
     public String createReportElements(String reportLabelId);
 }

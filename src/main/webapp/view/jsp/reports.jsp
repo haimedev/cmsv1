@@ -36,7 +36,7 @@
                                 <li>Timeline(Unpaid)</li>
                                 <li>Timeline(Paid)</li>
                             </ul>
-                        </li>
+                        </li>   
                         <li>Transaction</li>
                         <li>Reports</li>
                     </ul>
@@ -48,6 +48,7 @@
                 </div>
                 <br> <br>
                 <button id="generateReport_btn">Generate</button>
+                <label>Type</label>
             </div>
         </div>
     </body>
