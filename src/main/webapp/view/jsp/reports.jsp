@@ -43,12 +43,14 @@
                 </div>
             </div>
             <div id="rightColumn" class="columns">
-                <div id="elements">
-                    <c:out value="${reportElements}" escapeXml="false"/>
-                </div>
-                <br> <br>
-                <button id="generateReport_btn">Generate</button>
-                <label>Type</label>
+                <form action="${pageContext.request.contextPath}/ReportController" id="generate_frm">
+                    <div id="elements">
+                        <c:out value="${reportElements}" escapeXml="false"/>
+                    </div>
+                    <br> <br>
+                    <button type="submit" id="generateReport_btn">Generate</button>
+                </form>
+                
             </div>
         </div>
     </body>

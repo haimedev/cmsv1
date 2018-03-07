@@ -6,19 +6,12 @@ Date.prototype.toDateInputValue = (function() {
     local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
     return local.toJSON().slice(0,10);
 });
-$( document ).ready(function() {
-    $('#from_cal').val(new Date().toDateInputValue());
-    $('#to_cal').val(new Date().toDateInputValue());
-    $("#"+getParameterByName("reportLabelId")).css("background-color","yellow");
-});
 
 $(".rows").click(function (event){ 
     reportTitle = $(this).children("td").html();
     reportId = $(this).children("td").attr('id');
-    if(reportTitle == "Total Customers")
-    {
-        document.location.href = "ReportController?lbl=" + reportTitle + "&" + "reportLabelId=" + reportId;
-    }
+    document.location.href = "ReportController?lbl=" + reportTitle + "&" + "reportLabelId=" + reportId;
+    
 });
 
 function getParameterByName(name, url) {
@@ -33,8 +26,17 @@ function getParameterByName(name, url) {
 
 $("#generateReport_btn").click(function()
 {
-    alert(window.location.pathname);
-    alert(window.location.href + "&idid=123123bbbabc"); 
-    document.location.href = "ReportController?lbl=" + reportTitle + "&" + "reportLabelId=" + reportId
-        ;
+    document.location.href = "ReportController?lbl=" + reportTitle + "&" + "reportLabelId=" + reportId;
+});
+
+$("#generate_frm").submit(function()
+{
+    alert("a");
+    alert($("#from_cal").val());
+});
+
+$( document ).ready(function() {
+    $('#from_cal').val(new Date().toDateInputValue());
+    $('#to_cal').val(new Date().toDateInputValue());
+    $("#"+getParameterByName("reportLabelId")).css("background-color","yellow");
 });

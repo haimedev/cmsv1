@@ -58,14 +58,15 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
 //            {
 //                reportLabelId = rs.getString("pr_id");
 //            }
-            rs = _sql.myStmt.executeQuery("select pre_id, pre_label, pre_element "
+            rs = _sql.myStmt.executeQuery("select pre_id, pre_label, pre_element, pre_ext "
                     + "from page_report_elements as a join page_reports as b on a.pre_report_label_id=b.pr_id "
                     + "where pr_page_id='" + pageId + "' and pr_order='1' and pr_active='1' " 
                     + "and pre_active='1' order by pre_order asc;");
             
             while(rs.next())
             {
-                elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), rs.getString("pre_element"));
+                elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), 
+                        rs.getString("pre_element"), rs.getString("pre_ext"));
             }
             System.out.println(elementHTML);
             rs.close();
@@ -89,12 +90,14 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         ResultSet rs = null;
         try
         {
-            rs = _sql.myStmt.executeQuery("select pre_id, pre_label, pre_element from page_report_elements where pre_report_label_id='"
+            rs = _sql.myStmt.executeQuery("select pre_id, pre_label, pre_element, pre_ext "
+                    + "from page_report_elements where pre_report_label_id='"
                     + reportLabelId + "' and pre_active='1' order by pre_order asc;");
             
             while(rs.next())
             {
-                elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), rs.getString("pre_element"));
+                elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), 
+                        rs.getString("pre_element"), rs.getString("pre_ext"));
             }
             System.out.println(elementHTML);
             rs.close();
@@ -107,8 +110,9 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         return elementHTML;
     }
     
-    private String createElement(String elementId, String label, String type)
+    private String createElement(String elementId, String label, String type, String ext)
     {
+        String labelId = label;
         label = WordUtils.capitalizeFully(label);
         String returnHTML = "";
         if(!type.equals("calendar"))
@@ -118,19 +122,29 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         
         if(type.equals("calendar"))
         {
-            returnHTML = "<label>" + label + ": </label><input id=\"" + label + "_cal\" class=\"calendar\" type=\"date\"/>";
+            returnHTML = "<label>" + label + ": </label><input id=\"" + labelId+ext + "\" "
+                    + "name=\"" + labelId+ext + "\" class=\"calendar\" type=\"date\"/>";
         }
         
         else if(type.equals("textbox"))
         {
-            returnHTML += "<label>" + label + ": </label><input id=\""+ label + "_txt\" type=\"text\"/>";
+            returnHTML += "<label>" + label + ": </label><input id=\""+ labelId+ext +"\" "
+                    + "name=\"" + labelId+ext + "\" type=\"text\"/>";
         }
         
         else if(type.equals("dropdownlist"))
         {
-            returnHTML += "<input class=\"" + label + "\" list=\"type_lst\" name=\"type_txt\" "
+            returnHTML += "<input class=\"" + labelId + "_cls\" list=\"type_lst\" name=\"type_txt\" "
                     + "id=\"type_txt\" required style=\"width: 100%;\" autocomplete=\"off\">";
         }
+        
+        else if(type.equals("checkbox"))
+        {
+            returnHTML += "<input type=\"checkbox\" id=\"" + labelId+ext + "\" "
+                    + "name=\"" + labelId+ext + "\" value=\"checked\">" + label;
+        }
+        
+        
         return returnHTML;
     }
     
