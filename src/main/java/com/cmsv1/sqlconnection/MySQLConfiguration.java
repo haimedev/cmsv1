@@ -5,6 +5,7 @@
  */
 package com.cmsv1.sqlconnection;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,18 +17,17 @@ import java.util.logging.Logger;
  *
  * @author UpuanNgHARI
  */
-public class SQLiteConfiguration
+public class MySQLConfiguration
 {
     public Connection myConn;
-    public Statement myStmt;
-    
-    public SQLiteConfiguration()
+    public CallableStatement myStmt;
+    public MySQLConfiguration()
     {
         try
           {
-            Class.forName("org.sqlite.JDBC");
-            myConn = DriverManager.getConnection("jdbc:sqlite:E:\\programs\\CMS-v1\\SQLiteDB\\cmsv1.sqlite");
-            myStmt = myConn.createStatement();
+            Class.forName("com.mysql.jdbc.Driver");
+            myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/cms-v1", "root", "Haimemysql1");
+            //myStmt = myConn.prepareCall("{call "+sql+"}");
           }
         catch (Exception e)
           {
@@ -44,7 +44,7 @@ public class SQLiteConfiguration
           }
         catch (SQLException ex)
           {
-            Logger.getLogger(SQLiteConfiguration.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MySQLConfiguration.class.getName()).log(Level.SEVERE, null, ex);
           }
     }
 }

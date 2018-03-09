@@ -33,7 +33,9 @@ public class LoginController
                 System.out.println(request.getParameter("login_btn"));
                 RequestDispatcher rd = null;
                 boolean isValid = false;
+                System.out.println(request.getParameter("userName") + " ! " + request.getParameter("passWord"));
                 isValid = _serviceBean.isUserValid(request.getParameter("userName"), request.getParameter("passWord"));
+                System.out.println(isValid);
                 if(isValid)
                 {
 //                    mv.setViewName("view/jsp/home/home.jsp");

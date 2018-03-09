@@ -108,11 +108,11 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
         ResultSet rs = null;
         try
         {
-            rs = _sql.myStmt.executeQuery("select ctm_fullname from customers where ctm_active='1' order by ctm_fullname asc;");
+            rs = _sql.myStmt.executeQuery("select ctm_nickname from customers where ctm_active='1' order by ctm_nickname asc;");
             
             while(rs.next())
             {
-                customerNames.add(rs.getString("ctm_fullname"));
+                customerNames.add(rs.getString("ctm_nickname"));
             }
             rs.close();
             _sql.closeConnections();
