@@ -9,7 +9,7 @@
         <title>Cafe Management System</title>
     </head>
     <body>
-        <jsp:include page="../pageHeader.jsp"/>
+        <jsp:include page="pageHeader.jsp"/>
         <a id="back_btn" href="${pageContext.request.contextPath}/HomeController"> Back <--</a>
         <a id="title_btn" href="${pageContext.request.contextPath}/AmountBalanceController"> Money Balance Management </a>
         <div id="wrapper">    

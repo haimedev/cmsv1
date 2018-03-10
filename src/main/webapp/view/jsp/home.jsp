@@ -8,7 +8,7 @@
         <title>Cafe Management System</title>
     </head>
     <body>
-        <jsp:include page="../pageHeader.jsp"/>
+        <jsp:include page="pageHeader.jsp"/>
         <table id="moduleTbl">
             <tr>
                 <th class="moduleImg"><a href="${pageContext.request.contextPath}/TimelineController"> <img src="<c:url value="/view/images/time.jpg"/>"> </a> </th>

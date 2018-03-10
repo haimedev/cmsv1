@@ -71,6 +71,6 @@ public class LoginController
     {
         HttpSession session = request.getSession();
         session.removeAttribute("adminFullName");
-        return "view/jsp/login/login.jsp";
+        return "view/jsp/login.jsp";
     }
 }

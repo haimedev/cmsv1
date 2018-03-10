@@ -19,7 +19,7 @@ public class LoginServiceBeanImpl implements LoginServiceBean
         try
           {
             //rs = _sqliteConnection.myStmt.executeQuery("select *from admins where ad_user='"+ userName +"' and ad_pass='"+ passWord +"';");
-            _mysql.myStmt = _mysql.myConn.prepareCall("{call read_admin(?,?)}");
+            _mysql.myStmt = _mysql.myConn.prepareCall("{call r_admin(?,?)}");
             _mysql.myStmt.setString(1, userName);
             _mysql.myStmt.setString(2, passWord);
             rs = _mysql.myStmt.executeQuery();
@@ -45,7 +45,7 @@ public class LoginServiceBeanImpl implements LoginServiceBean
         ResultSet rs = null;
         try
         { 
-            _mysql.myStmt = _mysql.myConn.prepareCall("{call read_admin_fullname(?,?)}");
+            _mysql.myStmt = _mysql.myConn.prepareCall("{call r_admin_fullname(?,?)}");
             _mysql.myStmt.setString(1, userName);
             _mysql.myStmt.setString(2, passWord);
             rs = _mysql.myStmt.executeQuery();

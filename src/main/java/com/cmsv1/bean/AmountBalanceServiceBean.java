@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface AmountBalanceServiceBean
 {
-    public List<AmountBalanceProp> getAmountBalance(String timeLineType);
+    public List<AmountBalanceProp> getAmountBalance(String type);
     public void createAmountBalance(String adminFullName, String custName, String amount, String comments);
     public void updateAmountBalance(String adminFullName, String amountId);
     public List<String> readCustomers();

@@ -61,7 +61,7 @@ public class TimelineController
             request.setAttribute("timeProp", propList);
             request.setAttribute("timeLineType", timeLineType);
             request.setAttribute("customers", _serviceBean.readCustomers());
-            RequestDispatcher rd = request.getRequestDispatcher("view/jsp/timeline/timeline.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("view/jsp/timeline.jsp");
             rd.forward(request, response);
         }
         catch (Exception e)

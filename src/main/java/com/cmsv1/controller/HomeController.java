@@ -29,7 +29,7 @@ public class HomeController
         boolean adminLogged = ((session.getAttribute("adminFullName")== "" || session.getAttribute("adminFullName") == null) ? false:true);
         if(adminLogged)
         {
-            RequestDispatcher rd = request.getRequestDispatcher("view/jsp/home/home.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("view/jsp/home.jsp");
             rd.forward(request, response);
         }
         
@@ -42,6 +42,6 @@ public class HomeController
     @RequestMapping("/HomePage")
     public String getHomePage()
     {
-        return "view/jsp/home/home.jsp";
+        return "view/jsp/home.jsp";
     }
 }
