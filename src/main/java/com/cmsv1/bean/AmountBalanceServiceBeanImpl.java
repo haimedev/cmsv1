@@ -110,11 +110,11 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
             _mySQL.myStmt.setString(1, adminFullName);
             _mySQL.myStmt.setString(2, id);
             _mySQL.myStmt.execute();
-            if(!id.equals(""))
-            {
-                _sql.myStmt.executeQuery("update amount_balance set ab_active='0', ab_updateby='" + adminFullName + "' where ab_id='" + id + "';");
-                _sql.closeConnections();
-            }
+//            if(!id.equals(""))
+//            {
+//                _sql.myStmt.executeQuery("update amount_balance set ab_active='0', ab_updateby='" + adminFullName + "' where ab_id='" + id + "';");
+//                _sql.closeConnections();
+//            }
         }
         catch (Exception e)
         {
@@ -124,13 +124,13 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
     
     public List<String> readCustomers()
     {
-        SQLiteConfiguration _sql = new SQLiteConfiguration();
         List<String> customerNames = new ArrayList<>();
-        ResultSet rs = null;
         try
         {
-            rs = _sql.myStmt.executeQuery("select ctm_nickname from customers where ctm_active='1' order by ctm_nickname asc;");
-            
+            MySQLConfiguration _MySQL = new MySQLConfiguration();
+            ResultSet rs = null;
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call r_customer()}");
+            rs = _MySQL.myStmt.executeQuery();
             while(rs.next())
             {
                 customerNames.add(rs.getString("ctm_nickname"));

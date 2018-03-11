@@ -5,6 +5,7 @@
  */
 package com.cmsv1.bean;
 import com.cmsv1.sqlconnection.SQLiteConfiguration;
+import com.cmsv1.sqlconnection.MySQLConfiguration;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -23,9 +24,10 @@ import org.apache.commons.lang3.text.WordUtils;
 public class TimelineServiceBeanImpl implements TimelineServiceBean
 {
     
-    public List<TimeBalanceProp> getTimeBalance(String timeLineType)
+    public List<TimeBalanceProp> readTimeBalance(String timeLineType)
     {
         SQLiteConfiguration _sql = new SQLiteConfiguration();
+        MySQLConfiguration _MySQL = new MySQLConfiguration();
         List<TimeBalanceProp> propList = new ArrayList<>();
         String query = "";
         ResultSet rs = null;

@@ -57,7 +57,7 @@ public class TimelineController
             {
                 timeLineType = request.getParameter("timeLineType");
             }
-            List<TimeBalanceProp> propList = _serviceBean.getTimeBalance(timeLineType);
+            List<TimeBalanceProp> propList = _serviceBean.readTimeBalance(timeLineType);
             request.setAttribute("timeProp", propList);
             request.setAttribute("timeLineType", timeLineType);
             request.setAttribute("customers", _serviceBean.readCustomers());
