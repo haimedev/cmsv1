@@ -3,6 +3,8 @@ package com.cmsv1.controller;
 import com.cmsv1.bean.LoginServiceBeanImpl;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ public class LoginController
         HttpSession session = request.getSession();
         LoginServiceBeanImpl _serviceBean = new LoginServiceBeanImpl();
         ModelAndView mv = new ModelAndView();
+        Map<String, Object> map = new HashMap<>();
         try
         {
             Properties prop = new Properties();
@@ -34,15 +37,12 @@ public class LoginController
                 RequestDispatcher rd = null;
                 boolean isValid = false;
                 System.out.println(request.getParameter("userName") + " ! " + request.getParameter("passWord"));
-                isValid = _serviceBean.isUserValid(request.getParameter("userName"), request.getParameter("passWord"));
+                map = _serviceBean.isUserValid(request.getParameter("userName"), request.getParameter("passWord"));
                 System.out.println(isValid);
-                if(isValid)
+                if(map.containsKey("isUserValid") || (Boolean)map.get("isUserValid") == true)
                 {
-//                    mv.setViewName("view/jsp/home/home.jsp");
-//                    mv.addObject("name", prop.getProperty("name"));
-//                    rd = request.getRequestDispatcher("/view/jsp/home/home.jsp");
-//                    rd.forward(request, response);
-                    session.setAttribute("adminFullName", _serviceBean.retrieveUserFullName(request.getParameter("userName"), request.getParameter("passWord")));
+                    session.setAttribute("adminFullName", map.get("adminFullName"));
+                    session.setAttribute("adminId", map.get("adminId"));
                     response.sendRedirect("HomeController");
                     
                 }

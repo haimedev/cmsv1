@@ -24,7 +24,7 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
 {
     SQLiteConfiguration _sql = new SQLiteConfiguration();
     
-    public List<AmountBalanceProp> getAmountBalance(String type)
+    public List<AmountBalanceProp> readMoneyBalance(String type)
     {
         List<AmountBalanceProp> propList = new ArrayList<>();
         MySQLConfiguration _mySQL = new MySQLConfiguration();
@@ -46,7 +46,7 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
 //            {
 //                query = "select ab_id, ab_customername, ab_amount, ab_date, replace(ab_active,'0','Paid') as ab_active, ab_comments, ab_createby, ab_updateby from amount_balance where ab_active='0' order by ab_id desc;";
 //            }
-            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call r_amount_balance(?)}");
+            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call read_amount_balance(?)}");
             _mySQL.myStmt.setString(1, type);
             rs = _mySQL.myStmt.executeQuery();
             //rs = _sql.myStmt.executeQuery(query);
@@ -73,7 +73,7 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
         return propList;
     }
     
-    public void createAmountBalance(String adminFullName, String custName, String amount, String comments)
+    public void createMoneyBalance(String adminId, String custName, String amount, String comments)
     {
         try
         {
@@ -83,12 +83,12 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
             custName = WordUtils.capitalizeFully(custName);
             String dateNow = sdfDate.format(now);
             comments = (comments.equals("") || comments == null ? "No Comment" : comments);
-            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call c_amount_balance(?,?,?,?,?)}");
+            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call create_sys_customer_money_time(?,?,?,?,?)}");
             _mySQL.myStmt.setString(1, custName);
             _mySQL.myStmt.setString(2, amount);
-            _mySQL.myStmt.setString(3, comments);
-            _mySQL.myStmt.setString(4, dateNow);
-            _mySQL.myStmt.setString(5, adminFullName);
+            _mySQL.myStmt.setString(3, dateNow);
+            _mySQL.myStmt.setString(4, comments);
+            _mySQL.myStmt.setString(5, adminId);
             _mySQL.myStmt.execute();
             
             _mySQL.closeConnections();
@@ -101,12 +101,12 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
         }
     }
     
-    public void updateAmountBalance(String adminFullName, String id)
+    public void updateMoneyBalance(String adminFullName, String id)
     {
         try
         {
             MySQLConfiguration _mySQL = new MySQLConfiguration();
-            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call u_amount_balance(?,?)}");
+            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call update_amount_balance(?,?)}");
             _mySQL.myStmt.setString(1, adminFullName);
             _mySQL.myStmt.setString(2, id);
             _mySQL.myStmt.execute();
@@ -129,7 +129,7 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
         {
             MySQLConfiguration _MySQL = new MySQLConfiguration();
             ResultSet rs = null;
-            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call r_customer()}");
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_customer()}");
             rs = _MySQL.myStmt.executeQuery();
             while(rs.next())
             {

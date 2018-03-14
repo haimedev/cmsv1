@@ -2,15 +2,19 @@ package com.cmsv1.bean;
 
 import com.cmsv1.sqlconnection.SQLiteConfiguration;
 import com.cmsv1.sqlconnection.MySQLConfiguration;
+import com.mysql.fabric.xmlrpc.base.Param;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginServiceBeanImpl implements LoginServiceBean
 {
-    public boolean isUserValid(String userName, String passWord) throws SQLException
+    public Map<String, Object> isUserValid(String userName, String passWord) throws SQLException
     {
+        Map<String, Object> map = new HashMap<String, Object>();
         //SQLiteConfiguration _sqliteConnection = new SQLiteConfiguration();
         MySQLConfiguration _mysql = new MySQLConfiguration();
         //List<AdminData> lst = new ArrayList<AdminData>();
@@ -19,13 +23,15 @@ public class LoginServiceBeanImpl implements LoginServiceBean
         try
           {
             //rs = _sqliteConnection.myStmt.executeQuery("select *from admins where ad_user='"+ userName +"' and ad_pass='"+ passWord +"';");
-            _mysql.myStmt = _mysql.myConn.prepareCall("{call r_admin(?,?)}");
+            _mysql.myStmt = _mysql.myConn.prepareCall("{call read_sys_admin(?,?)}");
             _mysql.myStmt.setString(1, userName);
             _mysql.myStmt.setString(2, passWord);
             rs = _mysql.myStmt.executeQuery();
             while(rs.next())
               {
-                isValid = true;
+                map.put("isUserValid", true);
+                map.put("adminFullName", rs.getString("sa_nickname"));
+                map.put("adminId", rs.getString("sa_id"));
               }
           }
         catch (Exception ex)
@@ -34,7 +40,7 @@ public class LoginServiceBeanImpl implements LoginServiceBean
           }
         rs.close();
         _mysql.closeConnections();
-        return isValid;
+        return map;
     }
     
     public String retrieveUserFullName(String userName, String passWord) throws SQLException
@@ -45,7 +51,7 @@ public class LoginServiceBeanImpl implements LoginServiceBean
         ResultSet rs = null;
         try
         { 
-            _mysql.myStmt = _mysql.myConn.prepareCall("{call r_admin_fullname(?,?)}");
+            _mysql.myStmt = _mysql.myConn.prepareCall("{call read_admin_fullname(?,?)}");
             _mysql.myStmt.setString(1, userName);
             _mysql.myStmt.setString(2, passWord);
             rs = _mysql.myStmt.executeQuery();

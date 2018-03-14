@@ -113,11 +113,11 @@ $("#add_frm").submit(function()
         return true;
     }
     
-    else
-    {
-        alert("Please enter a valid name.");
-        return false;
-    }
+//    else
+//    {
+//        alert("Please enter a valid name.");
+//        return false;
+//    }
     
     
 });

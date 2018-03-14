@@ -14,8 +14,8 @@ import java.util.List;
  */
 public interface AmountBalanceServiceBean
 {
-    public List<AmountBalanceProp> getAmountBalance(String type);
-    public void createAmountBalance(String adminFullName, String custName, String amount, String comments);
-    public void updateAmountBalance(String adminFullName, String amountId);
+    public List<AmountBalanceProp> readMoneyBalance(String type);
+    public void createMoneyBalance(String adminId, String custName, String amount, String comments);
+    public void updateMoneyBalance(String adminFullName, String amountId);
     public List<String> readCustomers();
 }

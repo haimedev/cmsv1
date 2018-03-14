@@ -26,23 +26,24 @@ public class AmountBalanceController
         {
             HttpSession session = request.getSession();
             String adminFullName = session.getAttribute("adminFullName").toString();
+            String adminId = session.getAttribute("adminId").toString();
             String timeLineType = "unpaid";
             AmountBalanceServiceBeanImpl _serviceBean = new AmountBalanceServiceBeanImpl();
             if(request.getParameter("addBalance_btn") != null)
             {
-                _serviceBean.createAmountBalance(adminFullName, request.getParameter("custName_txt"), request.getParameter("amount_txt"), request.getParameter("comment_txt"));
+                _serviceBean.createMoneyBalance(adminId, request.getParameter("custName_txt"), request.getParameter("amount_txt"), request.getParameter("comment_txt"));
             }
              
             else if(request.getParameterMap().containsKey("del") && request.getParameter("del").equals("1"))
             {
-                _serviceBean.updateAmountBalance(adminFullName, request.getParameter("id"));
+                _serviceBean.updateMoneyBalance(adminFullName, request.getParameter("id"));
             }
             
             else if(request.getParameterMap().containsKey("timeLineType"))
             {
                 timeLineType = request.getParameter("timeLineType");
             }
-            List<AmountBalanceProp> propList = _serviceBean.getAmountBalance(timeLineType);
+            List<AmountBalanceProp> propList = _serviceBean.readMoneyBalance(timeLineType);
             request.setAttribute("balanceProp", propList);
             request.setAttribute("timeLineType", timeLineType);
             request.setAttribute("customers", _serviceBean.readCustomers());

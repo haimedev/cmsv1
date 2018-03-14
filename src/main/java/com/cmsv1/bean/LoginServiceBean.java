@@ -6,6 +6,7 @@
 package com.cmsv1.bean;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  *
@@ -13,6 +14,6 @@ import java.sql.SQLException;
  */
 public interface LoginServiceBean
 {
-   public boolean isUserValid(String userName, String passWord) throws SQLException;
+   public Map<String, Object> isUserValid(String userName, String passWord) throws SQLException;
    public String retrieveUserFullName(String userName, String passWord) throws SQLException;
 }
