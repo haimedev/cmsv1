@@ -6,6 +6,7 @@
 package com.cmsv1.bean;
 
 import com.cmsv1.bean.TimeBalanceProp;
+import com.cmsv1.bean.properties.SysCustomerProp;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
 public interface AmountBalanceServiceBean
 {
     public List<AmountBalanceProp> readMoneyBalance(String type);
-    public void createMoneyBalance(String adminId, String custName, String amount, String comments);
-    public void updateMoneyBalance(String adminFullName, String amountId);
-    public List<String> readCustomers();
+    public void createMoneyBalance(String adminId, String customerId, String amount, String comments);
+    public void updateMoneyBalance(String adminId, String transacId);
+    public List<SysCustomerProp> readCustomers();
 }

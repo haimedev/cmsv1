@@ -34,7 +34,7 @@ function addRowHandlers() {
                            var result = confirm("Pay this balance?\n" + name + ": " + value + "\n\nComment: \"" + comment + ".\"");
                             if(result)
                             {
-                                document.location.href = "AmountBalanceController?del=1&" + "id=" + id;
+                                document.location.href = "AmountBalanceController?del=1&" + "transacId=" + id;
                             } 
                         }
                     };
@@ -102,6 +102,7 @@ $("#add_frm").submit(function()
 {
     var customerNames = document.getElementById("customer_lst");
     var customerName_txt = $("#custName_txt").val();
+    var custId = $('#customer_lst').find('option[value="' + customerName_txt + '"]').attr('id')
     var tempCustomerNames = [];
     for(var i =0; i < customerNames.options.length; i++)
     {
@@ -110,14 +111,15 @@ $("#add_frm").submit(function()
     
     if(tempCustomerNames.includes(customerName_txt))
     {
+        $("#custId_txt").val(custId);
         return true;
     }
     
-//    else
-//    {
-//        alert("Please enter a valid name.");
-//        return false;
-//    }
+    else
+    {
+        alert("Please enter a valid name.");
+        return false;
+    }
     
     
 });

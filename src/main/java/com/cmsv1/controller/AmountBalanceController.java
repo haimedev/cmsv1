@@ -31,12 +31,14 @@ public class AmountBalanceController
             AmountBalanceServiceBeanImpl _serviceBean = new AmountBalanceServiceBeanImpl();
             if(request.getParameter("addBalance_btn") != null)
             {
-                _serviceBean.createMoneyBalance(adminId, request.getParameter("custName_txt"), request.getParameter("amount_txt"), request.getParameter("comment_txt"));
+                String customerId = request.getParameter("custId_txt");
+                _serviceBean.createMoneyBalance(adminId, customerId, request.getParameter("amount_txt"), request.getParameter("comment_txt"));
             }
              
             else if(request.getParameterMap().containsKey("del") && request.getParameter("del").equals("1"))
             {
-                _serviceBean.updateMoneyBalance(adminFullName, request.getParameter("id"));
+                System.out.println("here123");
+                _serviceBean.updateMoneyBalance(adminId, request.getParameter("transacId"));
             }
             
             else if(request.getParameterMap().containsKey("timeLineType"))
