@@ -2,7 +2,6 @@ package com.cmsv1.bean;
 
 import com.cmsv1.sqlconnection.SQLiteConfiguration;
 import com.cmsv1.sqlconnection.MySQLConfiguration;
-import com.mysql.fabric.xmlrpc.base.Param;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;

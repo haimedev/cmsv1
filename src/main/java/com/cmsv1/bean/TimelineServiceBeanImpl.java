@@ -31,32 +31,34 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         ResultSet rs = null;
         try
         {
-            if(timeLineType.equals("all"))
-            {
-                query = "select tb_id, tb_customername, tb_time, tb_date, replace(replace(tb_active,'0','used'),'1','unused') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance order by tb_id desc;";
-            }
-            
-            else if(timeLineType.equals("unused"))
-            {
-                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'1','unused') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance where tb_active='1' order by tb_id desc;";
-            }
-            
-            else if(timeLineType.equals("used"))
-            {
-                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'0','used') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance where tb_active='0' order by tb_id desc;";
-            }
-            rs = _sql.myStmt.executeQuery(query);
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_sys_customer_free_time(?)}");
+            _MySQL.myStmt.setString(1, timeLineType);
+//            if(timeLineType.equals("all"))
+//            {
+//                query = "select tb_id, tb_customername, tb_time, tb_date, replace(replace(tb_active,'0','used'),'1','unused') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance order by tb_id desc;";
+//            }
+//            
+//            else if(timeLineType.equals("unused"))
+//            {
+//                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'1','unused') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance where tb_active='1' order by tb_id desc;";
+//            }
+//            
+//            else if(timeLineType.equals("used"))
+//            {
+//                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'0','used') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance where tb_active='0' order by tb_id desc;";
+//            }
+            rs = _MySQL.myStmt.executeQuery(query);
             while(rs.next())
             {
                 TimeBalanceProp tb = new TimeBalanceProp();
-                tb.setTb_id(rs.getString("tb_id"));
-                tb.setTb_time(rs.getString("tb_time"));
-                tb.setTb_date(rs.getString("tb_date"));
-                tb.setTb_customername(rs.getString("tb_customername"));
-                tb.setTb_type(rs.getString("tb_active"));
-                tb.setTb_comments(rs.getString("tb_comments"));
-                tb.setTb_createBy(rs.getString("tb_createby"));
-                tb.setTb_updateBy(rs.getString("tb_updateby"));
+                tb.setTb_id(rs.getString("scft_id"));
+                tb.setTb_customername(rs.getString("sc_nickname"));
+                tb.setTb_time(rs.getString("scft_free_time"));
+                tb.setTb_date(rs.getString("scft_date"));
+                tb.setTb_type(rs.getString("scft_active"));
+                tb.setTb_comments(rs.getString("scft_comment"));
+                tb.setTb_createBy(rs.getString("scft_create_by"));
+                tb.setTb_updateBy(rs.getString("scft_update_by"));
                 propList.add(tb);
             }
             rs.close();
