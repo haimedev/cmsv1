@@ -6,6 +6,7 @@
 package com.cmsv1.bean;
 
 import com.cmsv1.bean.TimeBalanceProp;
+import com.cmsv1.bean.properties.SysCustomerProp;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
 public interface TimelineServiceBean
 {
     public List<TimeBalanceProp> readTimeBalance(String timeLineType);
-    public void createTimeBalance(String adminFullName, String custName, String timeHour, String timeMinute, String comments);
-    public void deleteTimeBalance(String adminFullName, String timeId);
-    public List<String> readCustomers();
+    public void createTimeBalance(String adminId, String customerId, String timeHour, String timeMinute, String comment);
+    public void updateFreeTime(String adminId, String transacId);
+    public List<SysCustomerProp> readCustomers();
 }

@@ -10,7 +10,7 @@
     <body>
         
         <div id="loginDiv">
-            <h1 id="companyName">Cafe Management Systemqwerty</h1>
+            <h1 id="companyName">Cafe Management System</h1>
             <form action="${pageContext.request.contextPath}/LoginController" method="post">
                 <table id="loginTable">
                     <tr>

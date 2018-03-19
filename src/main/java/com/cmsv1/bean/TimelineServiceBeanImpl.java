@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.cmsv1.bean;
+import com.cmsv1.bean.properties.SysCustomerProp;
 import com.cmsv1.sqlconnection.SQLiteConfiguration;
 import com.cmsv1.sqlconnection.MySQLConfiguration;
 import java.sql.ResultSet;
@@ -24,7 +25,6 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
     
     public List<TimeBalanceProp> readTimeBalance(String timeLineType)
     {
-        SQLiteConfiguration _sql = new SQLiteConfiguration();
         MySQLConfiguration _MySQL = new MySQLConfiguration();
         List<TimeBalanceProp> propList = new ArrayList<>();
         String query = "";
@@ -33,21 +33,7 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         {
             _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_sys_customer_free_time(?)}");
             _MySQL.myStmt.setString(1, timeLineType);
-//            if(timeLineType.equals("all"))
-//            {
-//                query = "select tb_id, tb_customername, tb_time, tb_date, replace(replace(tb_active,'0','used'),'1','unused') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance order by tb_id desc;";
-//            }
-//            
-//            else if(timeLineType.equals("unused"))
-//            {
-//                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'1','unused') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance where tb_active='1' order by tb_id desc;";
-//            }
-//            
-//            else if(timeLineType.equals("used"))
-//            {
-//                query = "select tb_id, tb_customername, tb_time, tb_date, replace(tb_active,'0','used') as tb_active, tb_comments, tb_createby, tb_updateby from time_balance where tb_active='0' order by tb_id desc;";
-//            }
-            rs = _MySQL.myStmt.executeQuery(query);
+            rs = _MySQL.myStmt.executeQuery();
             while(rs.next())
             {
                 TimeBalanceProp tb = new TimeBalanceProp();
@@ -62,7 +48,7 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
                 propList.add(tb);
             }
             rs.close();
-            _sql.closeConnections();
+            _MySQL.closeConnections();
         }
         catch (Exception e)
         {
@@ -71,35 +57,53 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         return propList;
     }
     
-    public void createTimeBalance(String adminFullName, String custName, String timeHour, String timeMinute, String comments)
+    public void createTimeBalance(String adminId, String customerId, String timeHour, String timeMinute, String comment)
     {
-        SQLiteConfiguration _sql = new SQLiteConfiguration();
+        MySQLConfiguration _MySQL = new MySQLConfiguration();
         try
         {
             //SimpleDateFormat dateNow = new SimpleDateFormat("MM/dd/yyyy HH:mm");
             String time = "";
-            custName = WordUtils.capitalizeFully(custName);
             SimpleDateFormat sdfDate = new SimpleDateFormat("MMMMM d, yyyy - h:mma (EEEE)");//dd/MM/yyyy
             Date now = new Date();
             String dateNow = sdfDate.format(now);
+            comment = (comment.equals("") || comment == null ? "No Comment" : comment);
             if(timeMinute.equals("0"))
             {
                 time = timeHour + "hour";
+                System.out.println("haime:: going true1");
             }
             
             else if(timeHour.equals("0"))
             {
                 time = timeMinute + "minute";
+                System.out.println("haime:: going true2");
             }
             
             else
             {
+                System.out.println("haime:: going true3");
                 time = timeHour + "hour " + timeMinute + "minute";
+                System.out.println(time);
             }
-            
-            
-            _sql.myStmt.executeQuery("insert into time_balance(tb_customername, tb_time, tb_date, tb_comments, tb_createby) values ('" + custName + "','" + time + "','" + dateNow + "','" + (comments.equals("") || comments == null ? "No Comment" : comments) + "','" + adminFullName + "');");
-            _sql.closeConnections();
+            System.out.println(time);
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call create_sys_customer_free_time(?,?,?,?,?)}");
+            System.out.println("1");
+            _MySQL.myStmt.setString(1, customerId);
+            System.out.println("2");
+            _MySQL.myStmt.setString(2, time);
+            System.out.println("3");
+            _MySQL.myStmt.setString(3, dateNow);
+            System.out.println("4");
+            _MySQL.myStmt.setString(4, comment);
+            System.out.println("5");
+            _MySQL.myStmt.setString(5, adminId);
+            System.out.println("6");
+            _MySQL.myStmt.execute();
+            System.out.println("7");
+            //_sql.myStmt.executeQuery("insert into time_balance(tb_customername, tb_time, tb_date, tb_comments, tb_createby) values ('" + custName + "','" + time + "','" + dateNow + "','" + (comments.equals("") || comments == null ? "No Comment" : comments) + "','" + adminFullName + "');");
+            //_sql.closeConnections();
+            _MySQL.closeConnections();
         }
         catch (Exception e)
         {
@@ -107,16 +111,16 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         }
     }
     
-    public void deleteTimeBalance(String adminFullName, String id)
+    public void updateFreeTime(String adminId, String transacId)
     {
-        SQLiteConfiguration _sql = new SQLiteConfiguration();
+        MySQLConfiguration _MySQL = new MySQLConfiguration();
         try
         {
-            if(!id.equals(""))
-            {
-                _sql.myStmt.executeQuery("update time_balance set tb_active='0', tb_updateby='" + adminFullName + "' where tb_id='" + id + "';");
-                _sql.closeConnections();
-            }
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call update_sys_customer_free_time(?,?)}");
+            _MySQL.myStmt.setString(1, adminId);
+            _MySQL.myStmt.setString(2, transacId);
+            _MySQL.myStmt.execute();
+            _MySQL.closeConnections();
         }
         catch (Exception e)
         {
@@ -124,25 +128,28 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         }
     }
     
-    public List<String> readCustomers()
+    public List<SysCustomerProp> readCustomers()
     {
-        SQLiteConfiguration _sql = new SQLiteConfiguration();
-        List<String> customerNames = new ArrayList<>();
-        ResultSet rs = null;
+        List<SysCustomerProp> customer = new ArrayList<>();
         try
         {
-            rs = _sql.myStmt.executeQuery("select ctm_fullname from customers where ctm_active='1' order by ctm_fullname asc;");
-            
+            MySQLConfiguration _MySQL = new MySQLConfiguration();
+            ResultSet rs = null;
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_sys_customer()}");
+            rs = _MySQL.myStmt.executeQuery();
             while(rs.next())
             {
-                customerNames.add(rs.getString("ctm_fullname"));
+                SysCustomerProp prop = new SysCustomerProp();
+                prop.setCustomerId(rs.getString("sc_id"));
+                prop.setCustomerName(rs.getString("sc_nickname"));
+                customer.add(prop);
             }
             rs.close();
-            _sql.closeConnections();
+            _MySQL.closeConnections();
         }
         catch (Exception e)
         {
         }
-        return customerNames;
+        return customer;
     }
 }

@@ -15,7 +15,7 @@
         <div id="wrapper">
             <div id="leftColumn" class="columns">
                 <div id="customerColumn">
-                    <form action="TimelineController" id="add_frm" name="addForm">   
+                    <form action="TimelineController" id="add_frm" name="addForm" method="post">   
                         <table id="rowClick">
                             <tr>
                                 <td>
@@ -25,9 +25,10 @@
                                     <input class="inputsText_cls" list="customer_lst" name="custName_txt" id="custName_txt" required style="width: 100%;" autocomplete="off">
                                         <datalist id="customer_lst">
                                             <c:forEach items="${customers}" var="_customers">
-                                                <option value="<c:out value="${_customers}"/>">
+                                                <option value="<c:out value="${_customers.customerName}"/>" id="<c:out value="${_customers.customerId}"/>">
                                             </c:forEach>
                                         </datalist>
+                                    <input type="hidden" name="custId_txt" id="custId_txt" value="">
                                 </td>
                                 <td>
                                     

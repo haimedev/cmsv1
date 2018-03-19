@@ -25,8 +25,9 @@ public class TimelineController
         try
         {
             HttpSession session = request.getSession();
-            session.setAttribute("page", "pg_tb");
+            session.setAttribute("pageId", "1");
             String adminFullName = session.getAttribute("adminFullName").toString();
+            String adminId = session.getAttribute("adminId").toString();
             String timeLineType = "unused";
             TimelineServiceBeanImpl _serviceBean = new TimelineServiceBeanImpl();
 //            if(request.getParameterMap().containsKey("isFromHome") && request.getParameter("isFromHome").equals("1"))
@@ -39,7 +40,8 @@ public class TimelineController
 
             if(request.getParameter("addBalance_btn") != null)
             {
-                _serviceBean.createTimeBalance(adminFullName, request.getParameter("custName_txt"), 
+                String customerId = request.getParameter("custId_txt");
+                _serviceBean.createTimeBalance(adminId, customerId, 
                         request.getParameter("timeHour_txt"), request.getParameter("timeMinute_txt"), 
                         request.getParameter("comment_txt"));
 //                List<TimeBalanceProp> propList = _serviceBean.getTimeBalance();
@@ -50,7 +52,7 @@ public class TimelineController
             
             else if(request.getParameterMap().containsKey("del") && request.getParameter("del").equals("1"))
             {
-                _serviceBean.deleteTimeBalance(adminFullName, request.getParameter("id"));
+                _serviceBean.updateFreeTime(adminId, request.getParameter("id"));
             }
             
             else if(request.getParameterMap().containsKey("timeLineType"))

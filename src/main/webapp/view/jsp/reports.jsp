@@ -16,15 +16,19 @@
                 <div id="customerColumn">
                     <p id="reportTitles_lbl">Report Titles</p>
                     <hr>
-                    <table id="reportLabels_tbl">
-                        <tbody>
-                            <c:forEach items="${reportsProp}" var="_reportsProp">
-                                <tr class="rows">
-                                    <td id="<c:out value="${_reportsProp.reportId}"/>"><c:out value="${_reportsProp.reportLabel}"/></td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
+                    <form action="ReportController" id="reportController_frm" method="post">
+                        <table id="reportLabels_tbl">
+                            <tbody>
+                                <c:forEach items="${reportsProp}" var="_reportsProp">
+                                    <tr class="rows">
+                                        <td id="<c:out value="${_reportsProp.reportId}"/>"><c:out value="${_reportsProp.reportLabel}"/></td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                        <input type="hidden" name="reportTitle_lbl" id="reportTitle_lbl" value="">
+                        <input type="hidden" name="reportId_lbl" id="reportId_lbl" value="">
+                    </form>
                 </div>
             </div>
             <div id="upperColumn" class="columns">

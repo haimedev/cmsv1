@@ -21,8 +21,6 @@ import org.apache.commons.lang3.text.WordUtils;
 
 public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
 {
-    SQLiteConfiguration _sql = new SQLiteConfiguration();
-    
     public List<AmountBalanceProp> readMoneyBalance(String type)
     {
         List<AmountBalanceProp> propList = new ArrayList<>();
@@ -68,7 +66,7 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
             customerId = WordUtils.capitalizeFully(customerId);
             String dateNow = sdfDate.format(now);
             comments = (comments.equals("") || comments == null ? "No Comment" : comments);
-            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call create_sys_customer_money_time(?,?,?,?,?)}");
+            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call create_sys_customer_money_balance(?,?,?,?,?)}");
             _mySQL.myStmt.setString(1, customerId);
             _mySQL.myStmt.setString(2, amount);
             _mySQL.myStmt.setString(3, dateNow);
@@ -124,7 +122,7 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
                 customer.add(prop);
             }
             rs.close();
-            _sql.closeConnections();
+            _MySQL.closeConnections();
         }
         catch (Exception e)
         {

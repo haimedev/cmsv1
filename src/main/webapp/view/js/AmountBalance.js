@@ -102,7 +102,7 @@ $("#add_frm").submit(function()
 {
     var customerNames = document.getElementById("customer_lst");
     var customerName_txt = $("#custName_txt").val();
-    var custId = $('#customer_lst').find('option[value="' + customerName_txt + '"]').attr('id')
+    var custId = $('#customer_lst').find('option[value="' + customerName_txt + '"]').attr('id');
     var tempCustomerNames = [];
     for(var i =0; i < customerNames.options.length; i++)
     {

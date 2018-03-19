@@ -37,7 +37,6 @@ public class AmountBalanceController
              
             else if(request.getParameterMap().containsKey("del") && request.getParameter("del").equals("1"))
             {
-                System.out.println("here123");
                 _serviceBean.updateMoneyBalance(adminId, request.getParameter("transacId"));
             }
             

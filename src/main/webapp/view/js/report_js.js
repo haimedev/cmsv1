@@ -10,8 +10,10 @@ Date.prototype.toDateInputValue = (function() {
 $(".rows").click(function (event){ 
     reportTitle = $(this).children("td").html();
     reportId = $(this).children("td").attr('id');
-    document.location.href = "ReportController?lbl=" + reportTitle + "&" + "reportLabelId=" + reportId;
-    
+    $("#reportTitle_lbl").val(reportTitle);
+    $("#reportId_lbl").val(reportId);
+    //document.location.href = "ReportController?lbl=" + reportTitle + "&" + "reportLabelId=" + reportId;
+    $("#reportController_frm").submit();
 });
 
 function getParameterByName(name, url) {

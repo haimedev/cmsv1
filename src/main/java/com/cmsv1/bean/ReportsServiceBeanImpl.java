@@ -5,6 +5,7 @@
  */
 package com.cmsv1.bean;
 
+import com.cmsv1.sqlconnection.MySQLConfiguration;
 import com.cmsv1.sqlconnection.SQLiteConfiguration;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,18 +19,22 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
     public List<ReportsProperties> readPageLabels(String pageId)
     {
         SQLiteConfiguration _sql = new SQLiteConfiguration();
+        MySQLConfiguration _MySQL = new MySQLConfiguration();
         List<ReportsProperties> propList = new ArrayList<>();
         ResultSet rs = null;
         try
         {
-            rs = _sql.myStmt.executeQuery("select pr_id, pr_report_label from page_reports where pr_page_id='" + pageId
-               + "' and pr_active='1' order by pr_order asc;");
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_page_report_label(?)}");
+            _MySQL.myStmt.setString(1, pageId);
+            rs = _MySQL.myStmt.executeQuery();
+//            rs = _sql.myStmt.executeQuery("select pr_id, pr_report_label from page_reports where pr_page_id='" + pageId
+//               + "' and pr_active='1' order by pr_order asc;");
 
             while(rs.next())
             {
                 ReportsProperties rp = new ReportsProperties();
-                rp.setReportId(rs.getString("pr_id"));
-                rp.setReportLabel(rs.getString("pr_report_label"));
+                rp.setReportId(rs.getString("prl_id"));
+                rp.setReportLabel(rs.getString("prl_label"));
                 propList.add(rp);
             }
 
@@ -46,6 +51,7 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
     public String createDefaultReportElements(String pageId)
     {
         SQLiteConfiguration _sql = new SQLiteConfiguration();
+        MySQLConfiguration _MySQL = new MySQLConfiguration();
         String elementHTML = "";
         String reportLabelId = "";
         ResultSet rs = null;
@@ -58,11 +64,13 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
 //            {
 //                reportLabelId = rs.getString("pr_id");
 //            }
-            rs = _sql.myStmt.executeQuery("select pre_id, pre_label, pre_element, pre_ext "
-                    + "from page_report_elements as a join page_reports as b on a.pre_report_label_id=b.pr_id "
-                    + "where pr_page_id='" + pageId + "' and pr_order='1' and pr_active='1' " 
-                    + "and pre_active='1' order by pre_order asc;");
-            
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_default_page_report_element(?)}");
+            _MySQL.myStmt.setString(1, pageId);
+            rs = _MySQL.myStmt.executeQuery();
+//            rs = _sql.myStmt.executeQuery("select pre_id, pre_label, pre_element, pre_ext "
+//                    + "from page_report_elements as a join page_reports as b on a.pre_report_label_id=b.pr_id "
+//                    + "where pr_page_id='" + pageId + "' and pr_order='1' and pr_active='1' " 
+//                    + "and pre_active='1' order by pre_order asc;");
             while(rs.next())
             {
                 elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), 
@@ -86,14 +94,18 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
             
         }
         SQLiteConfiguration _sql = new SQLiteConfiguration();
+        MySQLConfiguration _MySQL = new MySQLConfiguration();
         String elementHTML = "";
         ResultSet rs = null;
         try
         {
-            rs = _sql.myStmt.executeQuery("select pre_id, pre_label, pre_element, pre_ext "
-                    + "from page_report_elements where pre_report_label_id='"
-                    + reportLabelId + "' and pre_active='1' order by pre_order asc;");
-            
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_page_report_element(?)}");
+            _MySQL.myStmt.setString(1, reportLabelId);
+            rs = _MySQL.myStmt.executeQuery();
+//            rs = _sql.myStmt.executeQuery("select pre_id, pre_label, pre_element, pre_ext "
+//                    + "from page_report_elements where pre_report_label_id='"
+//                    + reportLabelId + "' and pre_active='1' order by pre_order asc;");
+//            
             while(rs.next())
             {
                 elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), 

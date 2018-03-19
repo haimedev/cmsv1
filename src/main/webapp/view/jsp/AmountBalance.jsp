@@ -26,7 +26,6 @@
                                         <datalist id="customer_lst">
                                             <c:forEach items="${customers}" var="_customers">
                                                 <option value="<c:out value="${_customers.customerName}"/>" id="<c:out value="${_customers.customerId}"/>">
-                                                
                                             </c:forEach>
                                         </datalist>
                                     <input type="hidden" name="custId_txt" id="custId_txt" value="">

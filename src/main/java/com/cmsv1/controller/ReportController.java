@@ -25,27 +25,27 @@ public class ReportController
     {
         try
         {
+            System.out.println(request.getParameter("reportTitle_lbl"));
+            System.out.println(request.getParameter("reportId_lbl"));
             HttpSession session = request.getSession();
-            String page = session.getAttribute("page").toString();
+            String pageId = session.getAttribute("pageId").toString();
             String adminFullName = session.getAttribute("adminFullName").toString();
             ReportsServiceBeanImpl _serviceBean = new ReportsServiceBeanImpl();
             
-            List<ReportsProperties> propList = _serviceBean.readPageLabels(page);
+            List<ReportsProperties> propList = _serviceBean.readPageLabels(pageId);
             session.setAttribute("reportsProp", propList);
             
             //if report label is clicked
-            if(request.getParameterMap().containsKey("reportLabelId") && request.getParameter("reportLabelId") != null)
+            if(request.getParameterMap().containsKey("reportId_lbl") && request.getParameter("reportId_lbl") != null)
             {
-                String reportElements = _serviceBean.createReportElements(request.getParameter("reportLabelId"));
+                String reportElements = _serviceBean.createReportElements(request.getParameter("reportId_lbl"));
                 request.setAttribute("reportElements", reportElements);
-                System.out.println(reportElements);
             }
             
             else
             {
-                String reportElements = _serviceBean.createDefaultReportElements(page);
+                String reportElements = _serviceBean.createDefaultReportElements(pageId);
                 request.setAttribute("reportElements", reportElements);
-                System.out.println("here123");
             }
             
             RequestDispatcher rd = request.getRequestDispatcher("view/jsp/reports.jsp");
