@@ -19,4 +19,5 @@ public interface TimelineServiceBean
     public void createTimeBalance(String adminId, String customerId, String timeHour, String timeMinute, String comment);
     public void updateFreeTime(String adminId, String transacId);
     public List<SysCustomerProp> readCustomers();
+    public String ConverTime(String setDate, String setFormat, String getFormat);
 }

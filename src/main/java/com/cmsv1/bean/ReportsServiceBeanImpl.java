@@ -5,17 +5,31 @@
  */
 package com.cmsv1.bean;
 
+import com.cmsv1.bean.properties.RPTCustomerRecordsProp;
+import com.cmsv1.bean.properties.properties;
 import com.cmsv1.sqlconnection.MySQLConfiguration;
 import com.cmsv1.sqlconnection.SQLiteConfiguration;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.lang3.text.WordUtils;
 
 public class ReportsServiceBeanImpl implements ReportsServiceBean 
 {
-    
+    properties prop = new properties();
     public List<ReportsProperties> readPageLabels(String pageId)
     {
         SQLiteConfiguration _sql = new SQLiteConfiguration();
@@ -57,20 +71,9 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         ResultSet rs = null;
         try
         {
-            //get the default first report label
-//            rs = _sql.myStmt.executeQuery("select pr_id from page_reports where pr_page_id='" + pageId
-//               + "' and pr_order='1' and pr_active='1';");
-//            while(rs.next())
-//            {
-//                reportLabelId = rs.getString("pr_id");
-//            }
             _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_default_page_report_element(?)}");
             _MySQL.myStmt.setString(1, pageId);
             rs = _MySQL.myStmt.executeQuery();
-//            rs = _sql.myStmt.executeQuery("select pre_id, pre_label, pre_element, pre_ext "
-//                    + "from page_report_elements as a join page_reports as b on a.pre_report_label_id=b.pr_id "
-//                    + "where pr_page_id='" + pageId + "' and pr_order='1' and pr_active='1' " 
-//                    + "and pre_active='1' order by pre_order asc;");
             while(rs.next())
             {
                 elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), 
@@ -134,14 +137,14 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         
         if(type.equals("calendar"))
         {
-            returnHTML = "<label>" + label + ": </label><input id=\"" + labelId+ext + "\" "
-                    + "name=\"" + labelId+ext + "\" class=\"calendar\" type=\"date\"/>";
+            returnHTML = "<label>" + label + ": </label><input id=\"" + labelId+"_"+ext + "\" "
+                    + "name=\"" + labelId+"_"+ext + "\" class=\"calendar\" type=\"date\"/>";
         }
         
         else if(type.equals("textbox"))
         {
-            returnHTML += "<label>" + label + ": </label><input id=\""+ labelId+ext +"\" "
-                    + "name=\"" + labelId+ext + "\" type=\"text\"/>";
+            returnHTML += "<label>" + label + ": </label><input id=\""+ labelId+"_"+ext +"\" "
+                    + "name=\"" + labelId+"_"+ext + "\" type=\"text\"/>";
         }
         
         else if(type.equals("dropdownlist"))
@@ -152,8 +155,8 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         
         else if(type.equals("checkbox"))
         {
-            returnHTML += "<input type=\"checkbox\" id=\"" + labelId+ext + "\" "
-                    + "name=\"" + labelId+ext + "\" value=\"checked\">" + label;
+            returnHTML += "<input type=\"checkbox\" id=\"" + labelId+"_"+ext + "\" "
+                    + "name=\"" + labelId+"_"+ext + "\" value=\"checked\">" + label;
         }
         
         
@@ -163,5 +166,105 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
     public String readElementList()
     {
         return "";
+    }
+    
+    
+    //read what elements are there in specific report labels. Then pass those elements into MAP
+    public List<String> readReportElement(String reportLabelId)
+    {
+        MySQLConfiguration _MySQL = new MySQLConfiguration();
+        List<String> reportElement = new ArrayList<>();
+        ResultSet rs = null;
+        try
+        {
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_report_element(?)}");
+            _MySQL.myStmt.setString(1, reportLabelId);
+            rs = _MySQL.myStmt.executeQuery();
+            while(rs.next())
+            {
+                reportElement.add(rs.getString("element"));
+            }
+            
+        rs.close();
+        _MySQL.closeConnections();
+        }
+        catch (Exception e)
+        {
+            
+        }
+        return reportElement;
+    }
+    
+    public List<RPTCustomerRecordsProp> readRPTCustomerRecords(Map<String, Object> map)
+    {
+        
+        List<RPTCustomerRecordsProp> propList = new ArrayList<>();
+        MySQLConfiguration _MySQL = new MySQLConfiguration();
+        ResultSet rs = null;
+        try
+        {
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_rpt_0001(?,?)}");
+            _MySQL.myStmt.setString(1, map.get("from").toString());
+            _MySQL.myStmt.setString(2, map.get("to").toString());
+            rs = _MySQL.myStmt.executeQuery();
+            while(rs.next())
+            {
+                RPTCustomerRecordsProp prop = new RPTCustomerRecordsProp();
+                prop.setFldTransacId(rs.getString("scft_id"));
+                prop.setFldCustomerName(rs.getString("sc_fullname"));
+                prop.setFldFreeTime(rs.getString("scft_free_time"));
+                prop.setFldDate(rs.getString("scft_date"));
+                prop.setFldActive(rs.getString("scft_active"));
+                prop.setFldComment(rs.getString("scft_comment"));
+                prop.setFldCreateBy(rs.getString("scft_create_by"));
+                prop.setFldUpdateBy(rs.getString("scft_update_by"));
+                propList.add(prop);
+            }
+            rs.close();
+            _MySQL.closeConnections();
+        }
+        catch (Exception e)
+        {
+            
+        }
+        return propList;
+    }
+    
+    public void generateRPT(List rptProp, Map<String, Object> map)
+    {
+        try
+        {
+            String myDate = "";
+            String userHomeDirectory = System.getProperty("user.home");
+            //SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd - h:mma (EEEE)");//dd/MM/yyyy
+            SimpleDateFormat df1 = new SimpleDateFormat("MM-dd-yyyy");//dd/MM/yyyy
+            Date now = new Date();
+            myDate = df1.format(now);
+            /* Output file location */
+            //String outputFile = prop.ReportOutput + File.separatorChar + "JasperTableExample.pdf";
+            String outputFile = prop.ReportOutput + map.get("rptId").toString() + "\\" + map.get("rptId").toString() + "_" + myDate + ".pdf";
+            System.out.println(outputFile);
+            JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(rptProp);
+            /* Map to hold Jasper report Parameters */
+    //        parameters.put("ds1", itemsJRBean);
+    //        parameters.put("info", "haimeInfomoTo");
+            Map<String, Object> parameters = new HashMap<>();
+            /* Using compiled version(.jasper) of Jasper report to generate PDF */
+            //JasperPrint jasperPrint = JasperFillManager.fillReport("resources/newReport.jasper", parameters, new JREmptyDataSource());
+            System.out.println(prop.JRXMLPath + map.get("rptId").toString() + ".jasper");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(prop.JRXMLPath + map.get("rptId").toString() + ".jasper", map, itemsJRBean);
+
+            /* outputStream to create PDF */
+            OutputStream outputStream = new FileOutputStream(new File(outputFile));
+
+            /* Write content to PDF file */
+            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+
+            System.out.println("File Generated");
+            }
+            catch (Exception e)
+            {
+            }
+        
     }
 }

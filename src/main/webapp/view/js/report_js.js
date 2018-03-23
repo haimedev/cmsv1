@@ -13,7 +13,7 @@ $(".rows").click(function (event){
     $("#reportTitle_lbl").val(reportTitle);
     $("#reportId_lbl").val(reportId);
     //document.location.href = "ReportController?lbl=" + reportTitle + "&" + "reportLabelId=" + reportId;
-    $("#reportController_frm").submit();
+    $("#reportLabel_frm").submit();
 });
 
 function getParameterByName(name, url) {
@@ -26,15 +26,9 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-$("#generateReport_btn").click(function()
+$("#generateReport_frm").submit(function()
 {
-    document.location.href = "ReportController?lbl=" + reportTitle + "&" + "reportLabelId=" + reportId;
-});
-
-$("#generate_frm").submit(function()
-{
-    alert("a");
-    alert($("#from_cal").val());
+    alert($("#").children("td").attr('id'));
 });
 
 $( document ).ready(function() {

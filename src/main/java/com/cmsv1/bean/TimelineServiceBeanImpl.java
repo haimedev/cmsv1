@@ -40,7 +40,8 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
                 tb.setTb_id(rs.getString("scft_id"));
                 tb.setTb_customername(rs.getString("sc_nickname"));
                 tb.setTb_time(rs.getString("scft_free_time"));
-                tb.setTb_date(rs.getString("scft_date"));
+                tb.setTb_date(ConverTime(rs.getString("scft_date"), "yyyy-MM-dd - h:mma (EEEE)", "MMMMM d, yyyy - h:mma (EEEE)"));
+                System.out.println("haime::" + ConverTime(rs.getString("scft_date"), "yyyy-MM-dd - h:mma (EEEE)", "MMMMM d, yyyy - h:mma (EEEE)"));
                 tb.setTb_type(rs.getString("scft_active"));
                 tb.setTb_comments(rs.getString("scft_comment"));
                 tb.setTb_createBy(rs.getString("scft_create_by"));
@@ -64,9 +65,11 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         {
             //SimpleDateFormat dateNow = new SimpleDateFormat("MM/dd/yyyy HH:mm");
             String time = "";
-            SimpleDateFormat sdfDate = new SimpleDateFormat("MMMMM d, yyyy - h:mma (EEEE)");//dd/MM/yyyy
+            //SimpleDateFormat sdfDate = new SimpleDateFormat("MMMMM d, yyyy - h:mma (EEEE)");//dd/MM/yyyy
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd - h:mma (EEEE)");//dd/MM/yyyy
             Date now = new Date();
             String dateNow = sdfDate.format(now);
+            System.out.println("time:: " + dateNow + "\n:: " + now);
             comment = (comment.equals("") || comment == null ? "No Comment" : comment);
             if(timeMinute.equals("0"))
             {
@@ -88,19 +91,12 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
             }
             System.out.println(time);
             _MySQL.myStmt = _MySQL.myConn.prepareCall("{call create_sys_customer_free_time(?,?,?,?,?)}");
-            System.out.println("1");
             _MySQL.myStmt.setString(1, customerId);
-            System.out.println("2");
             _MySQL.myStmt.setString(2, time);
-            System.out.println("3");
             _MySQL.myStmt.setString(3, dateNow);
-            System.out.println("4");
             _MySQL.myStmt.setString(4, comment);
-            System.out.println("5");
             _MySQL.myStmt.setString(5, adminId);
-            System.out.println("6");
             _MySQL.myStmt.execute();
-            System.out.println("7");
             //_sql.myStmt.executeQuery("insert into time_balance(tb_customername, tb_time, tb_date, tb_comments, tb_createby) values ('" + custName + "','" + time + "','" + dateNow + "','" + (comments.equals("") || comments == null ? "No Comment" : comments) + "','" + adminFullName + "');");
             //_sql.closeConnections();
             _MySQL.closeConnections();
@@ -151,5 +147,24 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         {
         }
         return customer;
+    }
+    
+    public String ConverTime(String setDate, String setFormat, String getFormat)
+    {
+        //String date1 = "2018-01-22 - 2:30PM (Thursday)"; //yyyy-MM-dd - h:mma (EEEE)
+        DateFormat df1 = new SimpleDateFormat(setFormat);
+        DateFormat df2 = new SimpleDateFormat(getFormat);
+        String getDate = "";
+        try
+        {
+            Date tempDate = df1.parse(setDate);
+            getDate = df2.format(tempDate);
+        }
+        catch (Exception e)
+        {
+            
+        }
+        System.out.println(getDate);
+        return getDate;
     }
 }

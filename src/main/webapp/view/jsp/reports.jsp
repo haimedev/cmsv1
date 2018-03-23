@@ -16,7 +16,7 @@
                 <div id="customerColumn">
                     <p id="reportTitles_lbl">Report Titles</p>
                     <hr>
-                    <form action="ReportController" id="reportController_frm" method="post">
+                    <form action="ReportController" id="reportLabel_frm" method="post">
                         <table id="reportLabels_tbl">
                             <tbody>
                                 <c:forEach items="${reportsProp}" var="_reportsProp">
@@ -47,12 +47,12 @@
                 </div>
             </div>
             <div id="rightColumn" class="columns">
-                <form action="${pageContext.request.contextPath}/ReportController" id="generate_frm">
+                <form action="${pageContext.request.contextPath}/ReportController" id="generateReport_frm" method="get">
                     <div id="elements">
                         <c:out value="${reportElements}" escapeXml="false"/>
                     </div>
                     <br> <br>
-                    <button type="submit" id="generateReport_btn">Generate</button>
+                    <button type="submit" id="generateReport_btn" name="generateReport_btn" value="generateReport">Generate</button>
                 </form>
                 
             </div>
