@@ -43,14 +43,16 @@ public class ReportController
             {
                 //session.setAttribute("reportLabelId", request.getParameter("reportId_lbl"));
                 session.setAttribute("reportLabelId", request.getParameter("reportId_lbl"));
+                session.setAttribute("reportTitle", request.getParameter("reportTitle_lbl"));
                 reportElements = _serviceBean.createReportElements(request.getParameter("reportId_lbl"));
             }
             
             else if(request.getParameterMap().containsKey("generateReport_btn") && request.getParameter("generateReport_btn") != null)
             {
                 //Map<String, Object> map = new HashMap<>();
-                Map<String, Object> paramMap = new HashMap<String, Object>();//Map that will pass to iReport
+                Map<String, Object> paramMap = new HashMap<>();//Map that will pass to iReport
                 String reportLabelId = session.getAttribute("reportLabelId").toString();
+                String reportTitle = session.getAttribute("reportTitle").toString();
                 List<String> reportElement = _serviceBean.readReportElement(reportLabelId);
                 if(reportLabelId.equals("RPT_0001"))
                 {
@@ -60,6 +62,7 @@ public class ReportController
                     map.put("to", request.getParameter("to_cal"));
                     map.put("all", request.getParameter("all_chk"));
                     map.put("rptId", reportLabelId);
+                    map.put("reportTitle", reportTitle);
                     List<RPTCustomerRecordsProp> rptProp = new ArrayList<>();
                     rptProp = _serviceBean.readRPTCustomerRecords(map);
                     _serviceBean.generateRPT(rptProp, map);
@@ -72,6 +75,7 @@ public class ReportController
             else
             {
                 session.setAttribute("reportLabelId", propList.get(0).getReportId());
+                session.setAttribute("reportTitle", propList.get(0).getReportLabel());
                 reportElements = _serviceBean.createReportElements(propList.get(0).getReportId());
             }
             
