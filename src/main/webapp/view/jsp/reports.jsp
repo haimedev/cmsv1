@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div id="rightColumn" class="columns">
-                <form action="${pageContext.request.contextPath}/ReportController" id="generateReport_frm" method="get">
+                <form action="${pageContext.request.contextPath}/ReportController" id="generateReport_frm" method="post">
                     <div id="elements">
                         <c:out value="${reportElements}" escapeXml="false"/>
                     </div>

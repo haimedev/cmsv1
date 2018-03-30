@@ -35,4 +35,21 @@ $( document ).ready(function() {
     $('#from_cal').val(new Date().toDateInputValue());
     $('#to_cal').val(new Date().toDateInputValue());
     $("#"+getParameterByName("reportLabelId")).css("background-color","yellow");
+    $(".customerName_cls").hide();
+});
+
+$(".drownDown_cls").click(function(){ 
+   $(this).val("");
+});
+
+$("#category_ddl").change(function(event){ 
+    if($(this).val() == "Individual")
+    {
+        $(".customerName_cls").show();
+    }
+    
+    else
+    {
+        $(".customerName_cls").hide();
+    }
 });

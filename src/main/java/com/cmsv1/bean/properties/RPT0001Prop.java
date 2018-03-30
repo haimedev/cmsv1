@@ -1,6 +1,6 @@
 package com.cmsv1.bean.properties;
 
-public class RPTCustomerRecordsProp
+public class RPT0001Prop
 {
     public String fldTransacId;
     public String fldCustomerName;

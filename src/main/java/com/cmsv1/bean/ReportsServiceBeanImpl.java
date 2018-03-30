@@ -5,7 +5,9 @@
  */
 package com.cmsv1.bean;
 
-import com.cmsv1.bean.properties.RPTCustomerRecordsProp;
+import com.cmsv1.bean.properties.RPT0001Prop;
+import com.cmsv1.bean.properties.ReportElementProp;
+import com.cmsv1.bean.properties.SysCustomerProp;
 import com.cmsv1.bean.properties.properties;
 import com.cmsv1.sqlconnection.MySQLConfiguration;
 import com.cmsv1.sqlconnection.SQLiteConfiguration;
@@ -16,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,33 +65,33 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         return propList;
     }
     
-    public String createDefaultReportElements(String pageId)
-    {
-        SQLiteConfiguration _sql = new SQLiteConfiguration();
-        MySQLConfiguration _MySQL = new MySQLConfiguration();
-        String elementHTML = "";
-        String reportLabelId = "";
-        ResultSet rs = null;
-        try
-        {
-            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_default_page_report_element(?)}");
-            _MySQL.myStmt.setString(1, pageId);
-            rs = _MySQL.myStmt.executeQuery();
-            while(rs.next())
-            {
-                elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), 
-                        rs.getString("pre_element"), rs.getString("pre_ext"));
-            }
-            System.out.println(elementHTML);
-            rs.close();
-            _sql.closeConnections();
-        } 
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return elementHTML;
-    }
+//    public String createDefaultReportElements(String pageId)
+//    {
+//        SQLiteConfiguration _sql = new SQLiteConfiguration();
+//        MySQLConfiguration _MySQL = new MySQLConfiguration();
+//        String elementHTML = "";
+//        String reportLabelId = "";
+//        ResultSet rs = null;
+//        try
+//        {
+//            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_default_page_report_element(?)}");
+//            _MySQL.myStmt.setString(1, pageId);
+//            rs = _MySQL.myStmt.executeQuery();
+//            while(rs.next())
+//            {
+//                elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), 
+//                        rs.getString("pre_element"), rs.getString("pre_ext"));
+//            }
+//            System.out.println(elementHTML);
+//            rs.close();
+//            _sql.closeConnections();
+//        } 
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//        return elementHTML;
+//    }
     
     public String createReportElements(String reportLabelId)
     {
@@ -100,6 +103,7 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         MySQLConfiguration _MySQL = new MySQLConfiguration();
         String elementHTML = "";
         ResultSet rs = null;
+        List<ReportElementProp> propList = new ArrayList<>();
         try
         {
             _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_page_report_element(?)}");
@@ -111,10 +115,17 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
 //            
             while(rs.next())
             {
-                elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), 
-                        rs.getString("pre_element"), rs.getString("pre_ext"));
+                ReportElementProp prop = new ReportElementProp();
+                prop.setPreId(rs.getString("pre_id"));
+                prop.setPreLabel(rs.getString("pre_label"));
+                prop.setPreElement(rs.getString("pre_element"));
+                prop.setPreExt(rs.getString("pre_ext"));
+                prop.setPreData(rs.getString("pred_data"));
+                propList.add(prop);
+//                elementHTML = elementHTML + createElement(rs.getString("pre_id"), rs.getString("pre_label"), 
+//                        rs.getString("pre_element"), rs.getString("pre_ext"));
             }
-            System.out.println(elementHTML);
+            elementHTML = elementHTML + createElement(propList);
             rs.close();
             _sql.closeConnections();
         } 
@@ -125,42 +136,109 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         return elementHTML;
     }
     
-    private String createElement(String elementId, String label, String type, String ext)
+    public String createElement(List<ReportElementProp> propList)
     {
-        String labelId = label;
-        label = WordUtils.capitalizeFully(label);
+        String tempId[] = new String[100];
+        Integer tempIdIndex = 0;
         String returnHTML = "";
-        if(!type.equals("calendar"))
+        for(ReportElementProp list : propList)
         {
-            returnHTML = "<br/><br/>";
+            //If list ID is not already processed
+            if(!Arrays.asList(tempId).contains(list.getPreId()))
+            {
+                String labelId = list.getPreLabel();
+                String label = WordUtils.capitalizeFully(list.getPreLabel());
+                String type = list.getPreElement();
+                String ext = list.getPreExt();
+                if(!type.equals("calendar"))
+                {
+                    returnHTML += "<br/><br/>";
+                }
+
+                if(type.equals("calendar"))
+                {
+                    returnHTML += "<label>" + label + ": </label><input id=\"" + labelId+"_"+ext + "\" "
+                            + "name=\"" + labelId+"_"+ext + "\" class=\"calendar\" type=\"date\"/>";
+                }
+
+                else if(type.equals("textbox"))
+                {
+                    returnHTML += "<label>" + label + ": </label><input id=\""+ labelId+"_"+ext +"\" "
+                            + "name=\"" + labelId+"_"+ext + "\" type=\"text\"/>";
+                }
+
+                else if(type.equals("dropdownlist"))
+                { 
+                    returnHTML += "<label>" + label + ": </label><input class=\"drownDown_cls\" list=\"" + labelId + "_lst\" id=\""+ labelId+"_"+ext +"\" "
+                            + "name=\"" + labelId+"_"+ext + "\" required>";
+                    returnHTML += "<datalist id=\"" + labelId + "_lst\">";
+                    for(ReportElementProp lst : propList)
+                    {
+                        if(lst.getPreId().equals(list.getPreId()))
+                        {
+                            returnHTML += "<option value=\"" + lst.getPreData() + "\">";
+                        }
+                    }
+                    returnHTML += "</datalist>";
+                    tempId[tempIdIndex] = list.getPreId();
+                    tempIdIndex++;
+                    
+                }
+
+                else if(type.equals("checkbox"))
+                {
+                    returnHTML += "<input type=\"checkbox\" id=\"" + labelId+"_"+ext + "\" "
+                            + "name=\"" + labelId+"_"+ext + "\" value=\"checked\">" + label;
+                }
+                
+                else if(type.equals("syscustomernames"))
+                {
+                    List<SysCustomerProp> prop = new ArrayList<>();
+                    prop = readCustomers();
+                    returnHTML += "<label class=\"customerName_cls\">" + label + ": </label>"
+                            + "<input class=\"drownDown_cls customerName_cls\" list=\"" + labelId + "_lst\" id=\""+ labelId+"_"+ext +"\" "
+                            + "name=\"" + labelId+"_"+ext + "\">";
+                    returnHTML += "<datalist id=\"" + labelId + "_lst\">";
+                    for(SysCustomerProp lst : prop)
+                    {
+                        returnHTML += "<option value=\"" + lst.getCustomerId() + ": " + lst.getCustomerName()+ "\">";
+                        
+                    }
+                    returnHTML += "</datalist>";
+                }
+            }
+            
+            else
+            {
+                
+            }
         }
-        
-        if(type.equals("calendar"))
-        {
-            returnHTML = "<label>" + label + ": </label><input id=\"" + labelId+"_"+ext + "\" "
-                    + "name=\"" + labelId+"_"+ext + "\" class=\"calendar\" type=\"date\"/>";
-        }
-        
-        else if(type.equals("textbox"))
-        {
-            returnHTML += "<label>" + label + ": </label><input id=\""+ labelId+"_"+ext +"\" "
-                    + "name=\"" + labelId+"_"+ext + "\" type=\"text\"/>";
-        }
-        
-        else if(type.equals("dropdownlist"))
-        {
-            returnHTML += "<input class=\"" + labelId + "_cls\" list=\"type_lst\" name=\"type_txt\" "
-                    + "id=\"type_txt\" required style=\"width: 100%;\" autocomplete=\"off\">";
-        }
-        
-        else if(type.equals("checkbox"))
-        {
-            returnHTML += "<input type=\"checkbox\" id=\"" + labelId+"_"+ext + "\" "
-                    + "name=\"" + labelId+"_"+ext + "\" value=\"checked\">" + label;
-        }
-        
-        
         return returnHTML;
+    }
+    
+    public List<SysCustomerProp> readCustomers()
+    {
+        List<SysCustomerProp> customer = new ArrayList<>();
+        try
+        {
+            MySQLConfiguration _MySQL = new MySQLConfiguration();
+            ResultSet rs = null;
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_sys_customer()}");
+            rs = _MySQL.myStmt.executeQuery();
+            while(rs.next())
+            {
+                SysCustomerProp prop = new SysCustomerProp();
+                prop.setCustomerId(rs.getString("sc_id"));
+                prop.setCustomerName(rs.getString("sc_nickname"));
+                customer.add(prop);
+            }
+            rs.close();
+            _MySQL.closeConnections();
+        }
+        catch (Exception e)
+        {
+        }
+        return customer;
     }
     
     public String readElementList()
@@ -195,21 +273,25 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         return reportElement;
     }
     
-    public List<RPTCustomerRecordsProp> readRPTCustomerRecords(Map<String, Object> map)
+    public List<RPT0001Prop> readRPT0001(Map<String, Object> map)
     {
         
-        List<RPTCustomerRecordsProp> propList = new ArrayList<>();
+        List<RPT0001Prop> propList = new ArrayList<>();
         MySQLConfiguration _MySQL = new MySQLConfiguration();
         ResultSet rs = null;
         try
         {
-            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_rpt_0001(?,?)}");
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call read_rpt_0001(?,?,?,?)}");
             _MySQL.myStmt.setString(1, map.get("from").toString());
             _MySQL.myStmt.setString(2, map.get("to").toString());
+            _MySQL.myStmt.setString(3, map.get("type").toString());
+            _MySQL.myStmt.setString(4, map.get("customerId").toString());
+            System.out.println("map:: " + map.get("type").toString());
+            System.out.println("map:: " + map.get("customerId").toString());
             rs = _MySQL.myStmt.executeQuery();
             while(rs.next())
             {
-                RPTCustomerRecordsProp prop = new RPTCustomerRecordsProp();
+                RPT0001Prop prop = new RPT0001Prop();
                 prop.setFldTransacId(rs.getString("scft_id"));
                 prop.setFldCustomerName(rs.getString("sc_fullname"));
                 prop.setFldFreeTime(rs.getString("scft_free_time"));
@@ -230,41 +312,28 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
         return propList;
     }
     
-    public void generateRPT(List rptProp, Map<String, Object> map)
+    public Map<String, Object> generateRPT(List rptProp, Map<String, Object> map)
     {
+        Map<String, Object> resultMap = new HashMap<>();
         try
         {
             String myDate = "";
-            String userHomeDirectory = System.getProperty("user.home");
-            //SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd - h:mma (EEEE)");//dd/MM/yyyy
-            SimpleDateFormat df1 = new SimpleDateFormat("MM-dd-yyyy");//dd/MM/yyyy
+            SimpleDateFormat df1 = new SimpleDateFormat("MM-dd-yyyy h-mma");
             Date now = new Date();
             myDate = df1.format(now);
-            /* Output file location */
-            //String outputFile = prop.ReportOutput + File.separatorChar + "JasperTableExample.pdf";
             String outputFile = prop.ReportOutput + map.get("rptId").toString() + "\\" + map.get("rptId").toString() + "_" + myDate + ".pdf";
-            System.out.println(outputFile);
             JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(rptProp);
-            /* Map to hold Jasper report Parameters */
-    //        parameters.put("ds1", itemsJRBean);
-    //        parameters.put("info", "haimeInfomoTo");
-            Map<String, Object> parameters = new HashMap<>();
-            /* Using compiled version(.jasper) of Jasper report to generate PDF */
-            //JasperPrint jasperPrint = JasperFillManager.fillReport("resources/newReport.jasper", parameters, new JREmptyDataSource());
-            System.out.println(prop.JRXMLPath + map.get("rptId").toString() + ".jasper");
             JasperPrint jasperPrint = JasperFillManager.fillReport(prop.JRXMLPath + map.get("rptId").toString() + ".jasper", map, itemsJRBean);
-
-            /* outputStream to create PDF */
             OutputStream outputStream = new FileOutputStream(new File(outputFile));
-
-            /* Write content to PDF file */
             JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-
             System.out.println("File Generated");
+            resultMap.put("pdfFile", outputFile);
+            resultMap.put("pdfName", map.get("rptId").toString() + "_" + myDate + ".pdf");
+            resultMap.put("jasperPrint", jasperPrint);
             }
             catch (Exception e)
             {
             }
-        
+        return resultMap;
     }
 }

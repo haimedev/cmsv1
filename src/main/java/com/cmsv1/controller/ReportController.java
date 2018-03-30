@@ -2,11 +2,12 @@ package com.cmsv1.controller;
 
 import com.cmsv1.bean.AmountBalanceProp;
 import com.cmsv1.bean.AmountBalanceServiceBeanImpl;
-import com.cmsv1.bean.properties.RPTCustomerRecordsProp;
+import com.cmsv1.bean.properties.RPT0001Prop;
 import com.cmsv1.bean.ReportsProperties;
 import com.cmsv1.bean.ReportsServiceBeanImpl;
 import com.cmsv1.bean.TimeBalanceProp;
 import com.cmsv1.bean.TimelineServiceBeanImpl;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,19 +16,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import haimedevframework.StringUtil;
+import java.awt.Desktop;
+import java.io.FileInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import net.sf.jasperreports.engine.JasperExportManager;
+
 @Controller
 public class ReportController 
 {
     @RequestMapping("ReportController")
     public void reportController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
+    { 
+        StringUtil _stringUtil = new StringUtil();
+        String tempDate = _stringUtil.DateConverter("2018-03-09","yyyy-MM-dd","MMMMM d, yyyy");
+        System.out.println("haime date::" + tempDate);
         try
         {
             HttpSession session = request.getSession();
@@ -51,26 +66,71 @@ public class ReportController
             {
                 //Map<String, Object> map = new HashMap<>();
                 Map<String, Object> paramMap = new HashMap<>();//Map that will pass to iReport
+                Map<String, Object> resultMap = new HashMap<>();//Map that will receive the data of report
                 String reportLabelId = session.getAttribute("reportLabelId").toString();
                 String reportTitle = session.getAttribute("reportTitle").toString();
                 List<String> reportElement = _serviceBean.readReportElement(reportLabelId);
                 if(reportLabelId.equals("RPT_0001"))
                 {
-                    System.out.println("rpt0001 11111");
+                    Map<String, String[]> parameters = request.getParameterMap();
+                    for(String parameter : parameters.keySet()) {
+                        System.out.println("param::" + parameter + ":: " + request.getParameter(parameter));
+                    }
+                    String customerId = request.getParameter("customer_scn");
+                    int endChar = customerId.indexOf(":");
                     Map<String, Object> map = new HashMap<String, Object>();//Map that will pass to function
                     map.put("from", request.getParameter("from_cal"));
                     map.put("to", request.getParameter("to_cal"));
-                    map.put("all", request.getParameter("all_chk"));
+                    map.put("type", request.getParameter("category_ddl"));
+                    String tempString = "2018-03-19";
+                    if(!customerId.equals(""))
+                    {
+                        map.put("customerId", customerId.substring(0, endChar));
+                    }
+                    else
+                    {
+                        map.put("customerId", "");
+                    }
+                    
+                    //map.put("all", request.getParameter("all_chk"));
                     map.put("rptId", reportLabelId);
                     map.put("reportTitle", reportTitle);
-                    List<RPTCustomerRecordsProp> rptProp = new ArrayList<>();
-                    rptProp = _serviceBean.readRPTCustomerRecords(map);
-                    _serviceBean.generateRPT(rptProp, map);
+                    List<RPT0001Prop> rptProp = new ArrayList<>();
+                    rptProp = _serviceBean.readRPT0001(map);
+                    map.put("from", _stringUtil.DateConverter(request.getParameter("from_cal"),"yyyy-MM-dd","MMMMM d, yyyy"));
+                    map.put("to", _stringUtil.DateConverter(request.getParameter("to_cal"),"yyyy-MM-dd","MMMMM d, yyyy"));
+                    resultMap = _serviceBean.generateRPT(rptProp, map);
                     System.out.println("rpt0001 2");
                 }
-                System.out.println("a1");
+                
+                //open pdf in browser
+//                String fileName = resultMap.get("pdfName").toString();
+//                String filePath = resultMap.get("pdfFile").toString().replaceAll("\\\\","/");
+//                PrintWriter out = response.getWriter();
+//                response.setContentType("application/pdf");
+//
+//                response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ";");
+//                FileOutputStream fileOut = new FileOutputStream(filePath);
+//                String fileName = resultMap.get("pdfName").toString();
+//                String filePath = resultMap.get("pdfFile").toString().replaceAll("\\\\","/");
+                String filePath = resultMap.get("pdfFile").toString();
+//                PrintWriter out = response.getWriter();
+//                response.setContentType("application/pdf");
+//                response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+//                FileInputStream fi = new FileInputStream(filePath);
+//
+//                fi.close();
+//                out.close();
+                System.out.println("111");
+                Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + filePath);
+                System.out.println("222");
+//                response.setContentType("application/x-download");
+//                response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");             
+//                //response.addHeader("Content-disposition", "attachment; filename=StatisticsrReport1.pdf");
+//                OutputStream out = response.getOutputStream();
+//                JasperExportManager.exportReportToPdfStream((InputStream)resultMap.get("jasperPrint"),out);
                 reportElements = _serviceBean.createReportElements(reportLabelId);
-                System.out.println("a2");
+                
             }
             else
             {
