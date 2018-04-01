@@ -30,9 +30,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.lang3.text.WordUtils;
 
+import haimedevframework.StringUtil;
+
 public class ReportsServiceBeanImpl implements ReportsServiceBean 
 {
     properties prop = new properties();
+    StringUtil _stringUtil = new StringUtil();
     public List<ReportsProperties> readPageLabels(String pageId)
     {
         SQLiteConfiguration _sql = new SQLiteConfiguration();
@@ -295,7 +298,7 @@ public class ReportsServiceBeanImpl implements ReportsServiceBean
                 prop.setFldTransacId(rs.getString("scft_id"));
                 prop.setFldCustomerName(rs.getString("sc_fullname"));
                 prop.setFldFreeTime(rs.getString("scft_free_time"));
-                prop.setFldDate(rs.getString("scft_date"));
+                prop.setFldDate(_stringUtil.DateConverter(rs.getString("scft_date"), "yyyy-MM-dd", "MMMMM d, yyyy"));
                 prop.setFldActive(rs.getString("scft_active"));
                 prop.setFldComment(rs.getString("scft_comment"));
                 prop.setFldCreateBy(rs.getString("scft_create_by"));
