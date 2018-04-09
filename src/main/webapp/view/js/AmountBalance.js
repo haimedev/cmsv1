@@ -9,7 +9,7 @@ $(".amountButton").click(function()
 
 //Clicked row in table. Confirm box will appear
 function addRowHandlers() {
-    if(type != "used")
+    if(type != "paid")
     {
         var table = document.getElementById("timeTable");
         var rows = table.getElementsByTagName("tr");
@@ -24,11 +24,12 @@ function addRowHandlers() {
                         var tempComment = row.getElementsByTagName("td")[1];
                         var tempName = row.getElementsByTagName("td")[2];
                         var tempValue = row.getElementsByTagName("td")[3];
-                        var tempType = row.getElementsByTagName("td")[5];
+                        var tempType = row.getElementsByTagName("td")[4];
                         var id = tempId.innerHTML;
                         var name = tempName.innerHTML;
                         var value = tempValue.innerHTML;
                         var comment = tempComment.innerHTML;
+                        alert(tempType.innerHTML);
                         if((type == "all" && tempType.innerHTML == "Unpaid") || type == "unpaid")
                         {
                            var result = confirm("Pay this balance?\n" + name + ": " + value + "\n\nComment: \"" + comment + ".\"");

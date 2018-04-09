@@ -20,9 +20,11 @@ import java.util.Date;
 import org.springframework.util.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
+import haimedevframework.DateUtil;
+
 public class TimelineServiceBeanImpl implements TimelineServiceBean
 {
-    
+    DateUtil _dateUtil = new DateUtil();
     public List<TimeBalanceProp> readTimeBalance(String timeLineType)
     {
         MySQLConfiguration _MySQL = new MySQLConfiguration();
@@ -40,8 +42,8 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
                 tb.setTb_id(rs.getString("scft_id"));
                 tb.setTb_customername(rs.getString("sc_nickname"));
                 tb.setTb_time(rs.getString("scft_free_time"));
-                tb.setTb_date(ConverTime(rs.getString("scft_date"), "yyyy-MM-dd - h:mma (EEEE)", "MMMMM d, yyyy - h:mma (EEEE)"));
-                System.out.println("haime::" + ConverTime(rs.getString("scft_date"), "yyyy-MM-dd - h:mma (EEEE)", "MMMMM d, yyyy - h:mma (EEEE)"));
+                tb.setCreateDate(ConverTime(rs.getString("scft_create_date"), "yyyy-MM-dd - h:mma (EEEE)", "MMMMM d, yyyy - h:mma (EEEE)"));
+                tb.setUpdateDate(ConverTime(rs.getString("scft_update_date"), "yyyy-MM-dd - h:mma (EEEE)", "MMMMM d, yyyy - h:mma (EEEE)"));
                 tb.setTb_type(rs.getString("scft_active"));
                 tb.setTb_comments(rs.getString("scft_comment"));
                 tb.setTb_createBy(rs.getString("scft_create_by"));
@@ -74,18 +76,15 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
             if(timeMinute.equals("0"))
             {
                 time = timeHour + "hour";
-                System.out.println("haime:: going true1");
             }
             
             else if(timeHour.equals("0"))
             {
                 time = timeMinute + "minute";
-                System.out.println("haime:: going true2");
             }
             
             else
             {
-                System.out.println("haime:: going true3");
                 time = timeHour + "hour " + timeMinute + "minute";
                 System.out.println(time);
             }
@@ -112,9 +111,10 @@ public class TimelineServiceBeanImpl implements TimelineServiceBean
         MySQLConfiguration _MySQL = new MySQLConfiguration();
         try
         {
-            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call update_sys_customer_free_time(?,?)}");
+            _MySQL.myStmt = _MySQL.myConn.prepareCall("{call update_sys_customer_free_time(?,?,?)}");
             _MySQL.myStmt.setString(1, adminId);
             _MySQL.myStmt.setString(2, transacId);
+            _MySQL.myStmt.setString(3, _dateUtil.GetDate("yyyy-MM-dd - h:mma (EEEE)"));
             _MySQL.myStmt.execute();
             _MySQL.closeConnections();
         }

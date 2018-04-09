@@ -65,12 +65,12 @@ function addRowHandlers() {
                         var tempComments = row.getElementsByTagName("td")[1];
                         var tempName = row.getElementsByTagName("td")[2];
                         var tempTime = row.getElementsByTagName("td")[3];
-                        var tempType = row.getElementsByTagName("td")[5];
+                        var tempType = row.getElementsByTagName("td")[4];
                         var id = tempId.innerHTML;
                         var comments = tempComments.innerHTML;
                         var name = tempName.innerHTML;
                         var time = tempTime.innerHTML;
-                        if((type == "all" && tempType.innerHTML == "unused") || type == "unused")
+                        if((type == "all" && tempType.innerHTML == "Unused") || type == "unused")
                         {
                            var result = confirm("Use this time?\n" + name + ": " + time
                                    + "\n\nComments: \"" + comments + ".\"");

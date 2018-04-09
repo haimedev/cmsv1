@@ -101,15 +101,17 @@
                         <th style="display:none">ID</th>
                         <th>Customer</th>
                         <th>Amount</th>
-                        <th>Date</th>
                         <c:choose>
                             <c:when test="${timeLineType=='all' || timeLineType=='paid'}">
                                 <th>Type</th>
                                 <th>Added By</th>
+                                <th>Added Date</th>
                                 <th>Updated By</th>
+                                <th>Updated Date</th>
                             </c:when>
                             <c:otherwise>
-                            <th>Added By
+                            <th>Added By</th>
+                            <th>Added Date</th>
                             </c:otherwise>
                         </c:choose>
                     </tr>
@@ -121,15 +123,17 @@
                             <td style="display:none"><c:out value="${_balanceProp.ab_comments}"/></td>
                             <td><c:out value="${_balanceProp.ab_customername}"/></td>
                             <td><c:out value="${_balanceProp.ab_amount}"/></td>
-                            <td><c:out value="${_balanceProp.ab_date}"/></td>
                             <c:choose>
                                 <c:when test="${timeLineType=='all' || timeLineType=='paid'}">
                                     <td>${_balanceProp.ab_type}</td>
                                     <td>${_balanceProp.ab_createBy}</td>
+                                    <td><c:out value="${_balanceProp.createDate}"/></td>
                                     <td>${_balanceProp.ab_updateBy}</td>
+                                    <td><c:out value="${_balanceProp.updateDate}"/></td>
                                 </c:when>
                                 <c:otherwise>
                                     <td>${_balanceProp.ab_createBy}</td>
+                                    <td><c:out value="${_balanceProp.createDate}"/></td>
                                 </c:otherwise>
                             </c:choose>
                         </tr>

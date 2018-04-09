@@ -102,16 +102,21 @@
                     <thead>
                         <tr>
                             <th style="display:none">ID</th>
-                            <th>Customer</th>
-                            <th>Free Time</th>
-                            <th>Date</th>
+                            
                             <c:choose>
                                 <c:when test = "${timeLineType == 'all' || timeLineType == 'used'}">
+                                    <th>Customer</th>
+                                    <th>Free Time</th>
                                     <th>Type</th>
                                     <th>Added By</th>
+                                    <th>Date Added</th>
                                     <th>Used By</th>
+                                    <th>Date Used</th>
                                 </c:when>
                                 <c:otherwise>
+                                    <th>Customer</th>
+                                    <th>Free Time</th>
+                                    <th>Date Added</th>
                                     <th>Added By</th>
                                 </c:otherwise>
                             </c:choose>
@@ -122,17 +127,21 @@
                             <tr>
                                 <td style="display:none"><c:out value="${_timeProp.tb_id}"/></td>
                                 <td style="display: none;"><c:out value="${_timeProp.tb_comments}"/></td>
-                                <td><c:out value="${_timeProp.tb_customername}"/></td>
-                                <td><c:out value="${_timeProp.tb_time}"/></td>
-                                <td><c:out value="${_timeProp.tb_date}"/></td>
                                 <c:choose>
-                                    <c:when test = "${timeLineType =='all' || timeLineType == 'paid'}">
+                                    <c:when test = "${timeLineType =='all' || timeLineType == 'used'}">
+                                        <td><c:out value="${_timeProp.tb_customername}"/></td>
+                                        <td><c:out value="${_timeProp.tb_time}"/></td>
                                         <td>${_timeProp.tb_type}</td>
                                         <td>${_timeProp.tb_createBy}</td>
+                                        <td><c:out value="${_timeProp.createDate}"/></td>
                                         <td>${_timeProp.tb_updateBy}</td>
+                                        <td><c:out value="${_timeProp.updateDate}"/></td>
                                     </c:when>
                                     <c:otherwise>
+                                        <td><c:out value="${_timeProp.tb_customername}"/></td>
+                                        <td><c:out value="${_timeProp.tb_time}"/></td>
                                         <td>${_timeProp.tb_createBy}</td>
+                                        <td><c:out value="${_timeProp.createDate}"/></td>
                                     </c:otherwise>
                                 </c:choose>
                             </tr>

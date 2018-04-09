@@ -13,12 +13,33 @@ public class TimeBalanceProp
 {
     public String tb_id;
     public String tb_time;
-    public String tb_date;
+    public String createDate;
+    public String updateDate;
     public String tb_customername;
     public String tb_type;
     public String tb_comments;
     public String tb_createBy;
     public String tb_updateBy;
+
+    public String getCreateDate()
+    {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate)
+    {
+        this.createDate = createDate;
+    }
+
+    public String getUpdateDate()
+    {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate)
+    {
+        this.updateDate = updateDate;
+    }
 
     public String getTb_createBy() {
         return tb_createBy;
@@ -77,16 +98,6 @@ public class TimeBalanceProp
     public void setTb_time(String tb_time)
     {
         this.tb_time = tb_time;
-    }
-
-    public String getTb_date()
-    {
-        return tb_date;
-    }
-
-    public void setTb_date(String tb_date)
-    {
-        this.tb_date = tb_date;
     }
 
     public String getTb_customername()

@@ -19,8 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.commons.lang3.text.WordUtils;
 
+import haimedevframework.DateUtil;
 public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
 {
+    DateUtil _dateUtil = new DateUtil();
     public List<AmountBalanceProp> readMoneyBalance(String type)
     {
         List<AmountBalanceProp> propList = new ArrayList<>();
@@ -39,7 +41,8 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
                 ab.setAb_id(rs.getString("scmb_id"));
                 ab.setAb_customername(rs.getString("sc_nickname"));
                 ab.setAb_amount(rs.getString("scmb_amount"));
-                ab.setAb_date(rs.getString("scmb_date"));
+                ab.setCreateDate(rs.getString("scmb_create_date"));
+                ab.setUpdateDate(rs.getString("scmb_update_date"));
                 ab.setAb_type(rs.getString("scmb_active"));
                 ab.setAb_comments(rs.getString("scmb_comment"));
                 ab.setAb_createBy(rs.getString("scmb_create_by"));
@@ -89,9 +92,10 @@ public class AmountBalanceServiceBeanImpl implements AmountBalanceServiceBean
         try
         {
             MySQLConfiguration _mySQL = new MySQLConfiguration();
-            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call update_sys_customer_money_balance(?,?)}");
+            _mySQL.myStmt = _mySQL.myConn.prepareCall("{call update_sys_customer_money_balance(?,?,?)}");
             _mySQL.myStmt.setString(1, adminId);
             _mySQL.myStmt.setString(2, transacId);
+            _mySQL.myStmt.setString(3, _dateUtil.GetDate("MMMMM d, yyyy - h:mma (EEEE)"));
             _mySQL.myStmt.execute();
 //            if(!id.equals(""))
 //            {

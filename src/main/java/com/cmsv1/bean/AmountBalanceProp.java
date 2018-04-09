@@ -14,11 +14,32 @@ public class AmountBalanceProp
     public String ab_id;
     public String ab_customername;
     public String ab_amount;
-    public String ab_date;
+    public String createDate;
+    public String updateDate;
     public String ab_comments;
     public String ab_type;
     public String ab_createBy;
     public String ab_updateBy;
+
+    public String getCreateDate()
+    {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate)
+    {
+        this.createDate = createDate;
+    }
+
+    public String getUpdateDate()
+    {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate)
+    {
+        this.updateDate = updateDate;
+    }
 
     public String getAb_createBy() {
         return ab_createBy;
@@ -75,16 +96,6 @@ public class AmountBalanceProp
     public void setAb_amount(String ab_amount)
     {
         this.ab_amount = ab_amount;
-    }
-
-    public String getAb_date()
-    {
-        return ab_date;
-    }
-
-    public void setAb_date(String ab_date)
-    {
-        this.ab_date = ab_date;
     }
 
     public String getAb_type()
